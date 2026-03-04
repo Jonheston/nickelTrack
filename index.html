@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NickelTrack — This is how you remind me of what I really ate</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <h1 class="logo">NickelTrack</h1>
+      <p class="tagline">This is how you remind me of what I really ate</p>
+      <div class="header-settings" aria-label="Serving units">
+        <span class="header-settings-label">Serving:</span>
+        <div class="units-toggle" role="group">
+          <button type="button" class="units-btn" data-units="us" aria-pressed="true">US</button>
+          <button type="button" class="units-btn" data-units="metric" aria-pressed="false">Metric</button>
+        </div>
+      </div>
+      <nav class="main-nav" aria-label="Main">
+        <a href="#meal-tracking" class="nav-link is-active" data-section="meal-tracking">Meal Tracking</a>
+        <a href="#food-database" class="nav-link" data-section="food-database">Food database</a>
+        <a href="#recipes" class="nav-link" data-section="recipes">Recipes</a>
+        <a href="#meal-planner" class="nav-link" data-section="meal-planner">Meal Planner</a>
+        <a href="#resources" class="nav-link" data-section="resources">External Resources</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <!-- Meal Tracking -->
+    <section id="meal-tracking" class="page-section is-visible" aria-labelledby="meal-tracking-heading">
+      <h2 id="meal-tracking-heading" class="section-heading">Meal Tracking</h2>
+      <div class="daily-summary card">
+        <h3>Today’s nickel</h3>
+        <div class="nickel-display">
+          <span class="nickel-value" id="today-total">0</span>
+          <span class="nickel-unit">µg</span>
+          <span class="nickel-divider">/</span>
+          <span class="nickel-value" id="today-goal">—</span>
+          <span class="nickel-unit">goal</span>
+        </div>
+        <p class="hint">Set your daily goal in settings. Track by meal and snack below.</p>
+      </div>
+      <div class="meals-list">
+        <article class="meal-card card" data-meal="breakfast">
+          <h4>Breakfast</h4>
+          <div class="meal-describe">
+            <label for="meal-desc-breakfast" class="visually-hidden">Describe this meal for AI suggestions</label>
+            <textarea id="meal-desc-breakfast" class="input meal-desc-input" data-meal="breakfast" placeholder="e.g. two eggs, whole wheat toast, orange juice" rows="3"></textarea>
+            <button type="button" class="btn btn-secondary btn-suggest-foods" data-meal="breakfast">Analyze with AI</button>
+          </div>
+          <ul class="meal-entries" data-meal="breakfast"><li class="empty-hint">No entries yet.</li></ul>
+          <button type="button" class="btn btn-secondary add-entry" data-meal="breakfast">+ Add entry</button>
+          <div class="meal-unmatched" data-meal="breakfast" hidden>
+            <p class="unmatched-intro">Not found in database:</p>
+            <ul class="unmatched-list"></ul>
+          </div>
+        </article>
+        <article class="meal-card card" data-meal="lunch">
+          <h4>Lunch</h4>
+          <div class="meal-describe">
+            <label for="meal-desc-lunch" class="visually-hidden">Describe this meal for AI suggestions</label>
+            <textarea id="meal-desc-lunch" class="input meal-desc-input" data-meal="lunch" placeholder="e.g. two eggs, whole wheat toast, orange juice" rows="3"></textarea>
+            <button type="button" class="btn btn-secondary btn-suggest-foods" data-meal="lunch">Analyze with AI</button>
+          </div>
+          <ul class="meal-entries" data-meal="lunch"><li class="empty-hint">No entries yet.</li></ul>
+          <button type="button" class="btn btn-secondary add-entry" data-meal="lunch">+ Add entry</button>
+          <div class="meal-unmatched" data-meal="lunch" hidden>
+            <p class="unmatched-intro">Not found in database:</p>
+            <ul class="unmatched-list"></ul>
+          </div>
+        </article>
+        <article class="meal-card card" data-meal="dinner">
+          <h4>Dinner</h4>
+          <div class="meal-describe">
+            <label for="meal-desc-dinner" class="visually-hidden">Describe this meal for AI suggestions</label>
+            <textarea id="meal-desc-dinner" class="input meal-desc-input" data-meal="dinner" placeholder="e.g. two eggs, whole wheat toast, orange juice" rows="3"></textarea>
+            <button type="button" class="btn btn-secondary btn-suggest-foods" data-meal="dinner">Analyze with AI</button>
+          </div>
+          <ul class="meal-entries" data-meal="dinner"><li class="empty-hint">No entries yet.</li></ul>
+          <button type="button" class="btn btn-secondary add-entry" data-meal="dinner">+ Add entry</button>
+          <div class="meal-unmatched" data-meal="dinner" hidden>
+            <p class="unmatched-intro">Not found in database:</p>
+            <ul class="unmatched-list"></ul>
+          </div>
+        </article>
+        <article class="meal-card card" data-meal="snacks">
+          <h4>Snacks</h4>
+          <div class="meal-describe">
+            <label for="meal-desc-snacks" class="visually-hidden">Describe this meal for AI suggestions</label>
+            <textarea id="meal-desc-snacks" class="input meal-desc-input" data-meal="snacks" placeholder="e.g. two eggs, whole wheat toast, orange juice" rows="3"></textarea>
+            <button type="button" class="btn btn-secondary btn-suggest-foods" data-meal="snacks">Analyze with AI</button>
+          </div>
+          <ul class="meal-entries" data-meal="snacks"><li class="empty-hint">No entries yet.</li></ul>
+          <button type="button" class="btn btn-secondary add-entry" data-meal="snacks">+ Add entry</button>
+          <div class="meal-unmatched" data-meal="snacks" hidden>
+            <p class="unmatched-intro">Not found in database:</p>
+            <ul class="unmatched-list"></ul>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Food database (searchable) -->
+    <section id="food-database" class="page-section" aria-labelledby="food-database-heading" hidden>
+      <h2 id="food-database-heading" class="section-heading">Food database</h2>
+      <p class="section-intro">Search foods by name or category. Use “Add entry” on Meal Tracking to log from this list.</p>
+      <div class="search-bar card">
+        <label for="food-search" class="visually-hidden">Search foods</label>
+        <input type="search" id="food-search" class="input input-search" placeholder="Search by name or category…" autocomplete="off" />
+        <span class="search-status" id="search-status" aria-live="polite"></span>
+      </div>
+      <div class="search-results" id="search-results" role="list"></div>
+      <div class="database-load-error card" id="database-load-error" hidden>
+        <p>Could not load the food database. Run <code>python3 build_nickel_database.py</code> to generate <code>nickel_foods.json</code>, then refresh.</p>
+      </div>
+    </section>
+
+    <!-- Add-to-meal modal -->
+    <div class="modal-overlay" id="add-to-meal-modal" hidden aria-modal="true" aria-labelledby="add-to-meal-title">
+      <div class="modal card">
+        <h3 id="add-to-meal-title" class="modal-title">Add to meal</h3>
+        <p class="modal-meal-name" id="modal-meal-name"></p>
+        <label for="modal-food-search" class="visually-hidden">Search foods</label>
+        <input type="search" id="modal-food-search" class="input input-search" placeholder="Search foods…" autocomplete="off" />
+        <div class="modal-results" id="modal-results" role="list"></div>
+        <button type="button" class="btn btn-secondary modal-cancel" id="modal-cancel">Cancel</button>
+      </div>
+    </div>
+
+    <!-- Disambiguation modal: Which "Rice"? Pick one option -->
+    <div class="modal-overlay" id="disambiguate-modal" hidden aria-modal="true" aria-labelledby="disambiguate-title">
+      <div class="modal card">
+        <h3 id="disambiguate-title" class="modal-title">Which one?</h3>
+        <p class="disambiguate-query" id="disambiguate-query"></p>
+        <ul class="disambiguate-list" id="disambiguate-list" role="list"></ul>
+        <button type="button" class="btn btn-secondary" id="disambiguate-skip">Skip</button>
+      </div>
+    </div>
+
+    <!-- Recipes -->
+    <section id="recipes" class="page-section" aria-labelledby="recipes-heading" hidden>
+      <h2 id="recipes-heading" class="section-heading">Recipes</h2>
+      <p class="section-intro">Save recipes with ingredients and nickel per serving (µg and low/medium/high).</p>
+      <div class="recipes-grid" id="recipes-grid">
+        <div class="empty-state card">
+          <p>No recipes yet. Add your first recipe to see it here.</p>
+          <button type="button" class="btn btn-primary" id="add-recipe-btn">Add recipe</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Meal Planner -->
+    <section id="meal-planner" class="page-section" aria-labelledby="meal-planner-heading" hidden>
+      <h2 id="meal-planner-heading" class="section-heading">Meal Planner</h2>
+      <p class="section-intro">Use presets or pull from your recipes to plan ahead.</p>
+      <div class="planner-controls">
+        <label>
+          <span class="label-text">Week of</span>
+          <input type="week" class="input" id="planner-week" />
+        </label>
+      </div>
+      <div class="planner-grid" id="planner-grid">
+        <div class="empty-state card">
+          <p>Pick a week above, then assign meals from presets or your recipes.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- External Resources -->
+    <section id="resources" class="page-section" aria-labelledby="resources-heading" hidden>
+      <h2 id="resources-heading" class="section-heading">External Resources</h2>
+      <p class="section-intro">Links and short descriptions for nickel-aware eating.</p>
+      <ul class="resources-list" id="resources-list">
+        <li class="resource-card card">
+          <a href="#" class="resource-link" target="_blank" rel="noopener">Example: Nickel allergy overview</a>
+          <p class="resource-desc">Short description of the resource and why it’s useful for tracking nickel in diet.</p>
+        </li>
+      </ul>
+      <button type="button" class="btn btn-secondary" id="add-resource-btn">+ Add resource</button>
+    </section>
+  </main>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

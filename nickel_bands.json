@@ -1,0 +1,25 @@
+{
+  "description": "Nickel band thresholds based on empirical quartiles of nickel_ug_per_100g from lowNiDiet + FDA data.",
+  "bands": [
+    {
+      "id": "very_low",
+      "label": "Very low nickel",
+      "max_ug_per_100g": 3.3000000000000003
+    },
+    {
+      "id": "low",
+      "label": "Low nickel",
+      "max_ug_per_100g": 8.175
+    },
+    {
+      "id": "medium",
+      "label": "Medium nickel",
+      "max_ug_per_100g": 29.944444444444446
+    },
+    {
+      "id": "high",
+      "label": "High nickel",
+      "max_ug_per_100g": null
+    }
+  ]
+}

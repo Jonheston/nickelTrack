@@ -1,0 +1,521 @@
+FiscalYear CalendarYear Collection TDSFoodNumber TDSFoodDescription Season TDSFoodListType Region Analyte Units Concentration ReportingLimit 
+2018 2017 1 1 "Milk, whole, fluid" Winter Regional Mid-Atlantic Nickel ppb 0 20 
+2018 2017 2 1 "Milk, whole, fluid" Winter Regional North Central Nickel ppb 0 20 
+2018 2017 3 1 "Milk, whole, fluid" Winter Regional Southeast Nickel ppb 0 20 
+2018 2018 4 1 "Milk, whole, fluid" Winter Regional Southwest Nickel ppb 0 20 
+2018 2018 5 1 "Milk, whole, fluid" Winter Regional Southeast Nickel ppb 0 20 
+2018 2018 6 1 "Milk, whole, fluid" Winter Regional Northeast Nickel ppb 0 20 
+2018 2018 7 1 "Milk, whole, fluid" Summer Regional West Nickel ppb 0 20 
+2018 2018 8 1 "Milk, whole, fluid" Summer Regional Northeast Nickel ppb 0 20 
+2018 2018 9 1 "Milk, whole, fluid" Summer Regional Southwest Nickel ppb 0 20 
+2018 2018 10 1 "Milk, whole, fluid" Summer Regional Mid-Atlantic Nickel ppb 0 20 
+2018 2018 11 1 "Milk, whole, fluid" Summer Regional West Nickel ppb 0 20 
+2018 2018 12 1 "Milk, whole, fluid" Summer Regional North Central Nickel ppb 0 20 
+2019 2018 1 1 "Milk, whole, fluid" Winter Regional West Nickel ppb 0 20 
+2019 2018 2 1 "Milk, whole, fluid" Winter Regional Southeast Nickel ppb 0 20 
+2019 2018 3 1 "Milk, whole, fluid" Winter Regional Northeast Nickel ppb 0 20 
+2019 2019 7 1 "Milk, whole, fluid" Summer Regional Southeast Nickel ppb 0 20 
+2019 2019 8 1 "Milk, whole, fluid" Summer Regional North Central Nickel ppb 0 20 
+2019 2019 9 1 "Milk, whole, fluid" Summer Regional West Nickel ppb 0 20 
+2019 2019 10 1 "Milk, whole, fluid" Summer Regional Northeast Nickel ppb 0 20 
+2019 2019 11 1 "Milk, whole, fluid" Summer Regional Mid-Atlantic Nickel ppb 0 20 
+2019 2019 12 1 "Milk, whole, fluid" Summer Regional Southwest Nickel ppb 0 20 
+2020 2019 1 1 "Milk, whole, fluid" Winter Regional Northeast Nickel ppb 0 20 
+2020 2019 2 1 "Milk, whole, fluid" Winter Regional Southwest Nickel ppb 0 20 
+2020 2019 3 1 "Milk, whole, fluid" Winter Regional Mid-Atlantic Nickel ppb 0 20 
+2020 2020 4 1 "Milk, whole, fluid" Winter Regional West Nickel ppb 0 20 
+2020 2020 5 1 "Milk, whole, fluid" Winter Regional North Central Nickel ppb 0 20 
+2020 2020 6 1 "Milk, whole, fluid" Winter Regional Southeast Nickel ppb 0 20 
+2018 2017 1 2 "Milk, reduced fat, fluid" Winter Regional Mid-Atlantic Nickel ppb 0 20 
+2018 2017 2 2 "Milk, reduced fat, fluid" Winter Regional North Central Nickel ppb 0 20 
+2018 2017 3 2 "Milk, reduced fat, fluid" Winter Regional Southeast Nickel ppb 0 20 
+2018 2018 4 2 "Milk, reduced fat, fluid" Winter Regional Southwest Nickel ppb 0 20 
+2018 2018 5 2 "Milk, reduced fat, fluid" Winter Regional Southeast Nickel ppb 0 20 
+2018 2018 6 2 "Milk, reduced fat, fluid" Winter Regional Northeast Nickel ppb 0 20 
+2018 2018 7 2 "Milk, reduced fat, fluid" Summer Regional West Nickel ppb 0 20 
+2018 2018 8 2 "Milk, reduced fat, fluid" Summer Regional Northeast Nickel ppb 0 20 
+2018 2018 9 2 "Milk, reduced fat, fluid" Summer Regional Southwest Nickel ppb 0 20 
+2018 2018 10 2 "Milk, reduced fat, fluid" Summer Regional Mid-Atlantic Nickel ppb 0 20 
+2018 2018 11 2 "Milk, reduced fat, fluid" Summer Regional West Nickel ppb 0 20 
+2018 2018 12 2 "Milk, reduced fat, fluid" Summer Regional North Central Nickel ppb 0 20 
+2019 2018 1 2 "Milk, reduced fat, fluid" Winter Regional West Nickel ppb 0 20 
+2019 2018 2 2 "Milk, reduced fat, fluid" Winter Regional Southeast Nickel ppb 0 20 
+2019 2018 3 2 "Milk, reduced fat, fluid" Winter Regional Northeast Nickel ppb 0 20 
+2019 2019 7 2 "Milk, reduced fat, fluid" Summer Regional Southeast Nickel ppb 0 20 
+2019 2019 8 2 "Milk, reduced fat, fluid" Summer Regional North Central Nickel ppb 0 20 
+2019 2019 9 2 "Milk, reduced fat, fluid" Summer Regional West Nickel ppb 0 20 
+2019 2019 10 2 "Milk, reduced fat, fluid" Summer Regional Northeast Nickel ppb 0 20 
+2019 2019 11 2 "Milk, reduced fat, fluid" Summer Regional Mid-Atlantic Nickel ppb 0 20 
+2019 2019 12 2 "Milk, reduced fat, fluid" Summer Regional Southwest Nickel ppb 0 20 
+2020 2019 1 2 "Milk, reduced fat, fluid" Winter Regional Northeast Nickel ppb 0 20 
+2020 2019 2 2 "Milk, reduced fat, fluid" Winter Regional Southwest Nickel ppb 0 20 
+2020 2019 3 2 "Milk, reduced fat, fluid" Winter Regional Mid-Atlantic Nickel ppb 0 20 
+2020 2020 4 2 "Milk, reduced fat, fluid" Winter Regional West Nickel ppb 0 20 
+2020 2020 5 2 "Milk, reduced fat, fluid" Winter Regional North Central Nickel ppb 0 20 
+2020 2020 6 2 "Milk, reduced fat, fluid" Winter Regional Southeast Nickel ppb 0 20 
+2018 2017 1 3 "Milk, chocolate, reduced fat, fluid" Winter Regional Mid-Atlantic Nickel ppb 56 20 
+2018 2017 2 3 "Milk, chocolate, reduced fat, fluid" Winter Regional North Central Nickel ppb 50 20 
+2018 2017 3 3 "Milk, chocolate, reduced fat, fluid" Winter Regional Southeast Nickel ppb 120 20 
+2018 2018 4 3 "Milk, chocolate, reduced fat, fluid" Winter Regional Southwest Nickel ppb 86 20 
+2018 2018 5 3 "Milk, chocolate, reduced fat, fluid" Winter Regional Southeast Nickel ppb 92 20 
+2018 2018 6 3 "Milk, chocolate, reduced fat, fluid" Winter Regional Northeast Nickel ppb 56 20 
+2018 2018 7 3 "Milk, chocolate, reduced fat, fluid" Summer Regional West Nickel ppb 81 20 
+2018 2018 8 3 "Milk, chocolate, reduced fat, fluid" Summer Regional Northeast Nickel ppb 77 20 
+2018 2018 9 3 "Milk, chocolate, reduced fat, fluid" Summer Regional Southwest Nickel ppb 79 20 
+2018 2018 10 3 "Milk, chocolate, reduced fat, fluid" Summer Regional Mid-Atlantic Nickel ppb 73 20 
+2018 2018 11 3 "Milk, chocolate, reduced fat, fluid" Summer Regional West Nickel ppb 97 20 
+2018 2018 12 3 "Milk, chocolate, reduced fat, fluid" Summer Regional North Central Nickel ppb 40 20 
+2019 2018 1 3 "Milk, chocolate, reduced fat, fluid" Winter Regional West Nickel ppb 60 20 
+2019 2018 2 3 "Milk, chocolate, reduced fat, fluid" Winter Regional Southeast Nickel ppb 54 20 
+2019 2018 3 3 "Milk, chocolate, reduced fat, fluid" Winter Regional Northeast Nickel ppb 56 20 
+2019 2019 7 3 "Milk, chocolate, reduced fat, fluid" Summer Regional Southeast Nickel ppb 69 20 
+2019 2019 8 3 "Milk, chocolate, reduced fat, fluid" Summer Regional North Central Nickel ppb 62 20 
+2019 2019 9 3 "Milk, chocolate, reduced fat, fluid" Summer Regional West Nickel ppb 67 20 
+2019 2019 10 3 "Milk, chocolate, reduced fat, fluid" Summer Regional Northeast Nickel ppb 62 20 
+2019 2019 11 3 "Milk, chocolate, reduced fat, fluid" Summer Regional Mid-Atlantic Nickel ppb 52 20 
+2019 2019 12 3 "Milk, chocolate, reduced fat, fluid" Summer Regional Southwest Nickel ppb 74 20 
+2020 2019 1 3 "Milk, chocolate, reduced fat, fluid" Winter Regional Northeast Nickel ppb 54 20 
+2020 2019 2 3 "Milk, chocolate, reduced fat, fluid" Winter Regional Southwest Nickel ppb 65 20 
+2020 2019 3 3 "Milk, chocolate, reduced fat, fluid" Winter Regional Mid-Atlantic Nickel ppb 59 20 
+2020 2020 4 3 "Milk, chocolate, reduced fat, fluid" Winter Regional West Nickel ppb 96 20 
+2020 2020 5 3 "Milk, chocolate, reduced fat, fluid" Winter Regional North Central Nickel ppb 43 20 
+2020 2020 6 3 "Milk, chocolate, reduced fat, fluid" Winter Regional Southeast Nickel ppb 39 20 
+2018 2017 1 4 "Milk, skim, fluid" Winter Regional Mid-Atlantic Nickel ppb 0 20 
+2018 2017 2 4 "Milk, skim, fluid" Winter Regional North Central Nickel ppb 0 20 
+2018 2017 3 4 "Milk, skim, fluid" Winter Regional Southeast Nickel ppb 0 20 
+2018 2018 4 4 "Milk, skim, fluid" Winter Regional Southwest Nickel ppb 0 20 
+2018 2018 5 4 "Milk, skim, fluid" Winter Regional Southeast Nickel ppb 0 20 
+2018 2018 6 4 "Milk, skim, fluid" Winter Regional Northeast Nickel ppb 0 20 
+2018 2018 7 4 "Milk, skim, fluid" Summer Regional West Nickel ppb 0 20 
+2018 2018 8 4 "Milk, skim, fluid" Summer Regional Northeast Nickel ppb 0 20 
+2018 2018 9 4 "Milk, skim, fluid" Summer Regional Southwest Nickel ppb 0 20 
+2018 2018 10 4 "Milk, skim, fluid" Summer Regional Mid-Atlantic Nickel ppb 0 20 
+2018 2018 11 4 "Milk, skim, fluid" Summer Regional West Nickel ppb 0 20 
+2018 2018 12 4 "Milk, skim, fluid" Summer Regional North Central Nickel ppb 0 20 
+2019 2018 1 4 "Milk, skim, fluid" Winter Regional West Nickel ppb 0 20 
+2019 2018 2 4 "Milk, skim, fluid" Winter Regional Southeast Nickel ppb 0 20 
+2019 2018 3 4 "Milk, skim, fluid" Winter Regional Northeast Nickel ppb 0 20 
+2019 2019 7 4 "Milk, skim, fluid" Summer Regional Southeast Nickel ppb 0 20 
+2019 2019 8 4 "Milk, skim, fluid" Summer Regional North Central Nickel ppb 0 20 
+2019 2019 9 4 "Milk, skim, fluid" Summer Regional West Nickel ppb 0 20 
+2019 2019 10 4 "Milk, skim, fluid" Summer Regional Northeast Nickel ppb 0 20 
+2019 2019 11 4 "Milk, skim, fluid" Summer Regional Mid-Atlantic Nickel ppb 0 20 
+2019 2019 12 4 "Milk, skim, fluid" Summer Regional Southwest Nickel ppb 0 20 
+2020 2019 1 4 "Milk, skim, fluid" Winter Regional Northeast Nickel ppb 0 20 
+2020 2019 2 4 "Milk, skim, fluid" Winter Regional Southwest Nickel ppb 0 20 
+2020 2019 3 4 "Milk, skim, fluid" Winter Regional Mid-Atlantic Nickel ppb 0 20 
+2020 2020 4 4 "Milk, skim, fluid" Winter Regional West Nickel ppb 0 20 
+2020 2020 5 4 "Milk, skim, fluid" Winter Regional North Central Nickel ppb 0 20 
+2020 2020 6 4 "Milk, skim, fluid" Winter Regional Southeast Nickel ppb 0 20 
+2018 2018 13 10 "Cheese, American, processed" Summer National National Nickel ppb 78 40 
+2019 2019 13 10 "Cheese, American, processed" Winter National National Nickel ppb 90 40 
+2020 2020 13 10 "Cheese, American, processed" Winter National National Nickel ppb 91 40 
+2018 2017 1 12 "Cheese, cheddar (sharp/mild)" Winter Regional Mid-Atlantic Nickel ppb 0 40 
+2018 2017 2 12 "Cheese, cheddar (sharp/mild)" Winter Regional North Central Nickel ppb 0 40 
+2018 2017 3 12 "Cheese, cheddar (sharp/mild)" Winter Regional Southeast Nickel ppb 0 40 
+2018 2018 4 12 "Cheese, cheddar (sharp/mild)" Winter Regional Southwest Nickel ppb 0 40 
+2018 2018 5 12 "Cheese, cheddar (sharp/mild)" Winter Regional Southeast Nickel ppb 0 40 
+2018 2018 6 12 "Cheese, cheddar (sharp/mild)" Winter Regional Northeast Nickel ppb 0 40 
+2018 2018 7 12 "Cheese, cheddar (sharp/mild)" Summer Regional West Nickel ppb 0 40 
+2018 2018 8 12 "Cheese, cheddar (sharp/mild)" Summer Regional Northeast Nickel ppb 0 40 
+2018 2018 9 12 "Cheese, cheddar (sharp/mild)" Summer Regional Southwest Nickel ppb 0 40 
+2018 2018 10 12 "Cheese, cheddar (sharp/mild)" Summer Regional Mid-Atlantic Nickel ppb 0 40 
+2018 2018 11 12 "Cheese, cheddar (sharp/mild)" Summer Regional West Nickel ppb 0 40 
+2018 2018 12 12 "Cheese, cheddar (sharp/mild)" Summer Regional North Central Nickel ppb 0 40 
+2019 2018 1 12 "Cheese, cheddar (sharp/mild)" Winter Regional West Nickel ppb 0 40 
+2019 2018 2 12 "Cheese, cheddar (sharp/mild)" Winter Regional Southeast Nickel ppb 0 40 
+2019 2018 3 12 "Cheese, cheddar (sharp/mild)" Winter Regional Northeast Nickel ppb 0 40 
+2019 2019 7 12 "Cheese, cheddar (sharp/mild)" Summer Regional Southeast Nickel ppb 0 40 
+2019 2019 8 12 "Cheese, cheddar (sharp/mild)" Summer Regional North Central Nickel ppb 0 40 
+2019 2019 9 12 "Cheese, cheddar (sharp/mild)" Summer Regional West Nickel ppb 0 40 
+2019 2019 10 12 "Cheese, cheddar (sharp/mild)" Summer Regional Northeast Nickel ppb 0 40 
+2019 2019 11 12 "Cheese, cheddar (sharp/mild)" Summer Regional Mid-Atlantic Nickel ppb 0 40 
+2019 2019 12 12 "Cheese, cheddar (sharp/mild)" Summer Regional Southwest Nickel ppb 0 40 
+2020 2019 1 12 "Cheese, cheddar (sharp/mild)" Winter Regional Northeast Nickel ppb 0 40 
+2020 2019 2 12 "Cheese, cheddar (sharp/mild)" Winter Regional Southwest Nickel ppb 0 40 
+2020 2019 3 12 "Cheese, cheddar (sharp/mild)" Winter Regional Mid-Atlantic Nickel ppb 0 40 
+2020 2020 4 12 "Cheese, cheddar (sharp/mild)" Winter Regional West Nickel ppb 0 40 
+2020 2020 5 12 "Cheese, cheddar (sharp/mild)" Winter Regional North Central Nickel ppb 0 40 
+2020 2020 6 12 "Cheese, cheddar (sharp/mild)" Winter Regional Southeast Nickel ppb 0 40 
+2018 2017 1 13 "Beef, ground, pan-cooked" Winter Regional Mid-Atlantic Nickel ppb 0 40 
+2018 2017 2 13 "Beef, ground, pan-cooked" Winter Regional North Central Nickel ppb 0 40 
+2018 2017 3 13 "Beef, ground, pan-cooked" Winter Regional Southeast Nickel ppb 0 40 
+2018 2018 4 13 "Beef, ground, pan-cooked" Winter Regional Southwest Nickel ppb 0 40 
+2018 2018 5 13 "Beef, ground, pan-cooked" Winter Regional Southeast Nickel ppb 0 40 
+2018 2018 6 13 "Beef, ground, pan-cooked" Winter Regional Northeast Nickel ppb 0 40 
+2018 2018 7 13 "Beef, ground, pan-cooked" Summer Regional West Nickel ppb 0 40 
+2018 2018 8 13 "Beef, ground, pan-cooked" Summer Regional Northeast Nickel ppb 0 40 
+2018 2018 9 13 "Beef, ground, pan-cooked" Summer Regional Southwest Nickel ppb 0 40 
+2018 2018 10 13 "Beef, ground, pan-cooked" Summer Regional Mid-Atlantic Nickel ppb 0 40 
+2018 2018 11 13 "Beef, ground, pan-cooked" Summer Regional West Nickel ppb 0 40 
+2018 2018 12 13 "Beef, ground, pan-cooked" Summer Regional North Central Nickel ppb 0 40 
+2019 2018 1 13 "Beef, ground, pan-cooked" Winter Regional West Nickel ppb 0 40 
+2019 2018 2 13 "Beef, ground, pan-cooked" Winter Regional Southeast Nickel ppb 47 40 
+2019 2018 3 13 "Beef, ground, pan-cooked" Winter Regional Northeast Nickel ppb 0 40 
+2019 2019 7 13 "Beef, ground, pan-cooked" Summer Regional Southeast Nickel ppb 0 40 
+2019 2019 8 13 "Beef, ground, pan-cooked" Summer Regional North Central Nickel ppb 0 40 
+2019 2019 9 13 "Beef, ground, pan-cooked" Summer Regional West Nickel ppb 0 40 
+2019 2019 10 13 "Beef, ground, pan-cooked" Summer Regional Northeast Nickel ppb 0 40 
+2019 2019 11 13 "Beef, ground, pan-cooked" Summer Regional Mid-Atlantic Nickel ppb 0 40 
+2019 2019 12 13 "Beef, ground, pan-cooked" Summer Regional Southwest Nickel ppb 0 40 
+2020 2019 1 13 "Beef, ground, pan-cooked" Winter Regional Northeast Nickel ppb 0 40 
+2020 2019 2 13 "Beef, ground, pan-cooked" Winter Regional Southwest Nickel ppb 0 40 
+2020 2019 3 13 "Beef, ground, pan-cooked" Winter Regional Mid-Atlantic Nickel ppb 47 40 
+2020 2020 4 13 "Beef, ground, pan-cooked" Winter Regional West Nickel ppb 0 40 
+2020 2020 5 13 "Beef, ground, pan-cooked" Winter Regional North Central Nickel ppb 0 40 
+2020 2020 6 13 "Beef, ground, pan-cooked" Winter Regional Southeast Nickel ppb 290 40 
+2018 2017 1 17 "Ham, cured (not canned), baked" Winter Regional Mid-Atlantic Nickel ppb 0 40 
+2018 2017 2 17 "Ham, cured (not canned), baked" Winter Regional North Central Nickel ppb 0 40 
+2018 2017 3 17 "Ham, cured (not canned), baked" Winter Regional Southeast Nickel ppb 0 40 
+2018 2018 4 17 "Ham, cured (not canned), baked" Winter Regional Southwest Nickel ppb 0 40 
+2018 2018 5 17 "Ham, cured (not canned), baked" Winter Regional Southeast Nickel ppb 0 40 
+2018 2018 6 17 "Ham, cured (not canned), baked" Winter Regional Northeast Nickel ppb 0 40 
+2018 2018 7 17 "Ham, cured (not canned), baked" Summer Regional West Nickel ppb 0 40 
+2018 2018 8 17 "Ham, cured (not canned), baked" Summer Regional Northeast Nickel ppb 0 40 
+2018 2018 9 17 "Ham, cured (not canned), baked" Summer Regional Southwest Nickel ppb 0 40 
+2018 2018 10 17 "Ham, cured (not canned), baked" Summer Regional Mid-Atlantic Nickel ppb 0 40 
+2018 2018 11 17 "Ham, cured (not canned), baked" Summer Regional West Nickel ppb 0 40 
+2018 2018 12 17 "Ham, cured (not canned), baked" Summer Regional North Central Nickel ppb 0 40 
+2019 2018 1 17 "Ham, cured (not canned), baked" Winter Regional West Nickel ppb 0 40 
+2019 2018 2 17 "Ham, cured (not canned), baked" Winter Regional Southeast Nickel ppb 40 40 
+2019 2018 3 17 "Ham, cured (not canned), baked" Winter Regional Northeast Nickel ppb 0 40 
+2019 2019 7 17 "Ham, cured (not canned), baked" Summer Regional Southeast Nickel ppb 0 40 
+2019 2019 8 17 "Ham, cured (not canned), baked" Summer Regional North Central Nickel ppb 0 40 
+2019 2019 9 17 "Ham, cured (not canned), baked" Summer Regional West Nickel ppb 0 40 
+2019 2019 10 17 "Ham, cured (not canned), baked" Summer Regional Northeast Nickel ppb 0 40 
+2019 2019 11 17 "Ham, cured (not canned), baked" Summer Regional Mid-Atlantic Nickel ppb 0 40 
+2019 2019 12 17 "Ham, cured (not canned), baked" Summer Regional Southwest Nickel ppb 0 40 
+2020 2019 1 17 "Ham, cured (not canned), baked" Winter Regional Northeast Nickel ppb 0 40 
+2020 2019 2 17 "Ham, cured (not canned), baked" Winter Regional Southwest Nickel ppb 0 40 
+2020 2019 3 17 "Ham, cured (not canned), baked" Winter Regional Mid-Atlantic Nickel ppb 0 40 
+2020 2020 4 17 "Ham, cured (not canned), baked" Winter Regional West Nickel ppb 0 40 
+2020 2020 5 17 "Ham, cured (not canned), baked" Winter Regional North Central Nickel ppb 0 40 
+2020 2020 6 17 "Ham, cured (not canned), baked" Winter Regional Southeast Nickel ppb 0 40 
+2018 2017 1 18 "Pork chop, pan-cooked with oil" Winter Regional Mid-Atlantic Nickel ppb 0 40 
+2018 2017 2 18 "Pork chop, pan-cooked with oil" Winter Regional North Central Nickel ppb 0 40 
+2018 2017 3 18 "Pork chop, pan-cooked with oil" Winter Regional Southeast Nickel ppb 0 40 
+2018 2018 4 18 "Pork chop, pan-cooked with oil" Winter Regional Southwest Nickel ppb 0 40 
+2018 2018 5 18 "Pork chop, pan-cooked with oil" Winter Regional Southeast Nickel ppb 0 40 
+2018 2018 6 18 "Pork chop, pan-cooked with oil" Winter Regional Northeast Nickel ppb 0 40 
+2018 2018 7 18 "Pork chop, pan-cooked with oil" Summer Regional West Nickel ppb 0 40 
+2018 2018 8 18 "Pork chop, pan-cooked with oil" Summer Regional Northeast Nickel ppb 0 40 
+2018 2018 9 18 "Pork chop, pan-cooked with oil" Summer Regional Southwest Nickel ppb 0 40 
+2018 2018 10 18 "Pork chop, pan-cooked with oil" Summer Regional Mid-Atlantic Nickel ppb 0 40 
+2018 2018 11 18 "Pork chop, pan-cooked with oil" Summer Regional West Nickel ppb 0 40 
+2018 2018 12 18 "Pork chop, pan-cooked with oil" Summer Regional North Central Nickel ppb 0 40 
+2019 2018 1 18 "Pork chop, pan-cooked with oil" Winter Regional West Nickel ppb 0 40 
+2019 2018 2 18 "Pork chop, pan-cooked with oil" Winter Regional Southeast Nickel ppb 0 40 
+2019 2018 3 18 "Pork chop, pan-cooked with oil" Winter Regional Northeast Nickel ppb 0 40 
+2019 2019 7 18 "Pork chop, pan-cooked with oil" Summer Regional Southeast Nickel ppb 0 40 
+2019 2019 8 18 "Pork chop, pan-cooked with oil" Summer Regional North Central Nickel ppb 0 40 
+2019 2019 9 18 "Pork chop, pan-cooked with oil" Summer Regional West Nickel ppb 0 40 
+2019 2019 10 18 "Pork chop, pan-cooked with oil" Summer Regional Northeast Nickel ppb 0 40 
+2019 2019 11 18 "Pork chop, pan-cooked with oil" Summer Regional Mid-Atlantic Nickel ppb 0 40 
+2019 2019 12 18 "Pork chop, pan-cooked with oil" Summer Regional Southwest Nickel ppb 0 40 
+2020 2019 1 18 "Pork chop, pan-cooked with oil" Winter Regional Northeast Nickel ppb 0 40 
+2020 2019 2 18 "Pork chop, pan-cooked with oil" Winter Regional Southwest Nickel ppb 0 40 
+2020 2019 3 18 "Pork chop, pan-cooked with oil" Winter Regional Mid-Atlantic Nickel ppb 0 40 
+2020 2020 4 18 "Pork chop, pan-cooked with oil" Winter Regional West Nickel ppb 0 40 
+2020 2020 5 18 "Pork chop, pan-cooked with oil" Winter Regional North Central Nickel ppb 0 40 
+2020 2020 6 18 "Pork chop, pan-cooked with oil" Winter Regional Southeast Nickel ppb 0 40 
+2018 2017 1 19 "Pork sausage (link/patty), pan-cooked" Winter Regional Mid-Atlantic Nickel ppb 0 40 
+2018 2017 2 19 "Pork sausage (link/patty), pan-cooked" Winter Regional North Central Nickel ppb 0 40 
+2018 2017 3 19 "Pork sausage (link/patty), pan-cooked" Winter Regional Southeast Nickel ppb 0 40 
+2018 2018 4 19 "Pork sausage (link/patty), pan-cooked" Winter Regional Southwest Nickel ppb 0 40 
+2018 2018 5 19 "Pork sausage (link/patty), pan-cooked" Winter Regional Southeast Nickel ppb 0 40 
+2018 2018 6 19 "Pork sausage (link/patty), pan-cooked" Winter Regional Northeast Nickel ppb 0 40 
+2018 2018 7 19 "Pork sausage (link/patty), pan-cooked" Summer Regional West Nickel ppb 0 40 
+2018 2018 8 19 "Pork sausage (link/patty), pan-cooked" Summer Regional Northeast Nickel ppb 0 40 
+2018 2018 9 19 "Pork sausage (link/patty), pan-cooked" Summer Regional Southwest Nickel ppb 0 40 
+2018 2018 10 19 "Pork sausage (link/patty), pan-cooked" Summer Regional Mid-Atlantic Nickel ppb 0 40 
+2018 2018 11 19 "Pork sausage (link/patty), pan-cooked" Summer Regional West Nickel ppb 0 40 
+2018 2018 12 19 "Pork sausage (link/patty), pan-cooked" Summer Regional North Central Nickel ppb 0 40 
+2019 2018 1 19 "Pork sausage (link/patty), pan-cooked" Winter Regional West Nickel ppb 0 40 
+2019 2018 2 19 "Pork sausage (link/patty), pan-cooked" Winter Regional Southeast Nickel ppb 0 40 
+2019 2018 3 19 "Pork sausage (link/patty), pan-cooked" Winter Regional Northeast Nickel ppb 0 40 
+2019 2019 7 19 "Pork sausage (link/patty), pan-cooked" Summer Regional Southeast Nickel ppb 0 40 
+2019 2019 8 19 "Pork sausage (link/patty), pan-cooked" Summer Regional North Central Nickel ppb 0 40 
+2019 2019 9 19 "Pork sausage (link/patty), pan-cooked" Summer Regional West Nickel ppb 43 40 
+2019 2019 10 19 "Pork sausage (link/patty), pan-cooked" Summer Regional Northeast Nickel ppb 0 40 
+2019 2019 11 19 "Pork sausage (link/patty), pan-cooked" Summer Regional Mid-Atlantic Nickel ppb 0 40 
+2019 2019 12 19 "Pork sausage (link/patty), pan-cooked" Summer Regional Southwest Nickel ppb 0 40 
+2020 2019 1 19 "Pork sausage (link/patty), pan-cooked" Winter Regional Northeast Nickel ppb 0 40 
+2020 2019 2 19 "Pork sausage (link/patty), pan-cooked" Winter Regional Southwest Nickel ppb 0 40 
+2020 2019 3 19 "Pork sausage (link/patty), pan-cooked" Winter Regional Mid-Atlantic Nickel ppb 0 40 
+2020 2020 4 19 "Pork sausage (link/patty), pan-cooked" Winter Regional West Nickel ppb 0 40 
+2020 2020 5 19 "Pork sausage (link/patty), pan-cooked" Winter Regional North Central Nickel ppb 0 40 
+2020 2020 6 19 "Pork sausage (link/patty), pan-cooked" Winter Regional Southeast Nickel ppb 0 40 
+2018 2017 1 20 "Pork bacon, oven-cooked" Winter Regional Mid-Atlantic Nickel ppb 0 40 
+2018 2017 2 20 "Pork bacon, oven-cooked" Winter Regional North Central Nickel ppb 0 40 
+2018 2017 3 20 "Pork bacon, oven-cooked" Winter Regional Southeast Nickel ppb 0 40 
+2018 2018 4 20 "Pork bacon, oven-cooked" Winter Regional Southwest Nickel ppb 0 40 
+2018 2018 5 20 "Pork bacon, oven-cooked" Winter Regional Southeast Nickel ppb 0 40 
+2018 2018 6 20 "Pork bacon, oven-cooked" Winter Regional Northeast Nickel ppb 0 40 
+2018 2018 7 20 "Pork bacon, oven-cooked" Summer Regional West Nickel ppb 90 40 
+2018 2018 8 20 "Pork bacon, oven-cooked" Summer Regional Northeast Nickel ppb 0 40 
+2018 2018 9 20 "Pork bacon, oven-cooked" Summer Regional Southwest Nickel ppb 0 40 
+2018 2018 10 20 "Pork bacon, oven-cooked" Summer Regional Mid-Atlantic Nickel ppb 0 40 
+2018 2018 11 20 "Pork bacon, oven-cooked" Summer Regional West Nickel ppb 55 40 
+2018 2018 12 20 "Pork bacon, oven-cooked" Summer Regional North Central Nickel ppb 0 40 
+2019 2018 1 20 "Pork bacon, oven-cooked" Winter Regional West Nickel ppb 0 40 
+2019 2018 2 20 "Pork bacon, oven-cooked" Winter Regional Southeast Nickel ppb 0 40 
+2019 2018 3 20 "Pork bacon, oven-cooked" Winter Regional Northeast Nickel ppb 41 40 
+2019 2019 7 20 "Pork bacon, oven-cooked" Summer Regional Southeast Nickel ppb 0 40 
+2019 2019 8 20 "Pork bacon, oven-cooked" Summer Regional North Central Nickel ppb 0 40 
+2019 2019 9 20 "Pork bacon, oven-cooked" Summer Regional West Nickel ppb 0 40 
+2019 2019 10 20 "Pork bacon, oven-cooked" Summer Regional Northeast Nickel ppb 0 40 
+2019 2019 11 20 "Pork bacon, oven-cooked" Summer Regional Mid-Atlantic Nickel ppb 0 40 
+2019 2019 12 20 "Pork bacon, oven-cooked" Summer Regional Southwest Nickel ppb 0 40 
+2020 2019 1 20 "Pork bacon, oven-cooked" Winter Regional Northeast Nickel ppb 0 40 
+2020 2019 2 20 "Pork bacon, oven-cooked" Winter Regional Southwest Nickel ppb 0 40 
+2020 2019 3 20 "Pork bacon, oven-cooked" Winter Regional Mid-Atlantic Nickel ppb 0 40 
+2020 2020 4 20 "Pork bacon, oven-cooked" Winter Regional West Nickel ppb 0 40 
+2020 2020 5 20 "Pork bacon, oven-cooked" Winter Regional North Central Nickel ppb 0 40 
+2020 2020 6 20 "Pork bacon, oven-cooked" Winter Regional Southeast Nickel ppb 0 40 
+2018 2017 1 22 "Lamb chop, pan-cooked with oil" Winter Regional Mid-Atlantic Nickel ppb 0 40 
+2018 2017 2 22 "Lamb chop, pan-cooked with oil" Winter Regional North Central Nickel ppb 0 40 
+2018 2017 3 22 "Lamb chop, pan-cooked with oil" Winter Regional Southeast Nickel ppb 0 40 
+2018 2018 4 22 "Lamb chop, pan-cooked with oil" Winter Regional Southwest Nickel ppb 0 40 
+2018 2018 5 22 "Lamb chop, pan-cooked with oil" Winter Regional Southeast Nickel ppb 0 40 
+2018 2018 6 22 "Lamb chop, pan-cooked with oil" Winter Regional Northeast Nickel ppb 0 40 
+2018 2018 7 22 "Lamb chop, pan-cooked with oil" Summer Regional West Nickel ppb 0 40 
+2018 2018 8 22 "Lamb chop, pan-cooked with oil" Summer Regional Northeast Nickel ppb 0 40 
+2018 2018 9 22 "Lamb chop, pan-cooked with oil" Summer Regional Southwest Nickel ppb 0 40 
+2018 2018 10 22 "Lamb chop, pan-cooked with oil" Summer Regional Mid-Atlantic Nickel ppb 0 40 
+2018 2018 11 22 "Lamb chop, pan-cooked with oil" Summer Regional West Nickel ppb 0 40 
+2018 2018 12 22 "Lamb chop, pan-cooked with oil" Summer Regional North Central Nickel ppb 0 40 
+2019 2018 1 22 "Lamb chop, pan-cooked with oil" Winter Regional West Nickel ppb 0 40 
+2019 2018 2 22 "Lamb chop, pan-cooked with oil" Winter Regional Southeast Nickel ppb 0 40 
+2019 2018 3 22 "Lamb chop, pan-cooked with oil" Winter Regional Northeast Nickel ppb 0 40 
+2019 2019 7 22 "Lamb chop, pan-cooked with oil" Summer Regional Southeast Nickel ppb 0 40 
+2019 2019 8 22 "Lamb chop, pan-cooked with oil" Summer Regional North Central Nickel ppb 0 40 
+2019 2019 9 22 "Lamb chop, pan-cooked with oil" Summer Regional West Nickel ppb 0 40 
+2019 2019 10 22 "Lamb chop, pan-cooked with oil" Summer Regional Northeast Nickel ppb 0 40 
+2019 2019 11 22 "Lamb chop, pan-cooked with oil" Summer Regional Mid-Atlantic Nickel ppb 0 40 
+2019 2019 12 22 "Lamb chop, pan-cooked with oil" Summer Regional Southwest Nickel ppb 0 40 
+2020 2019 1 22 "Lamb chop, pan-cooked with oil" Winter Regional Northeast Nickel ppb 0 40 
+2020 2019 2 22 "Lamb chop, pan-cooked with oil" Winter Regional Southwest Nickel ppb 0 40 
+2020 2019 3 22 "Lamb chop, pan-cooked with oil" Winter Regional Mid-Atlantic Nickel ppb 0 40 
+2020 2020 4 22 "Lamb chop, pan-cooked with oil" Winter Regional West Nickel ppb 0 40 
+2020 2020 5 22 "Lamb chop, pan-cooked with oil" Winter Regional North Central Nickel ppb 0 40 
+2020 2020 6 22 "Lamb chop, pan-cooked with oil" Winter Regional Southeast Nickel ppb 0 40 
+2018 2017 1 26 "Turkey breast, oven-roasted" Winter Regional Mid-Atlantic Nickel ppb 0 40 
+2018 2017 2 26 "Turkey breast, oven-roasted" Winter Regional North Central Nickel ppb 0 40 
+2018 2017 3 26 "Turkey breast, oven-roasted" Winter Regional Southeast Nickel ppb 0 40 
+2018 2018 4 26 "Turkey breast, oven-roasted" Winter Regional Southwest Nickel ppb 0 40 
+2018 2018 5 26 "Turkey breast, oven-roasted" Winter Regional Southeast Nickel ppb 0 40 
+2018 2018 6 26 "Turkey breast, oven-roasted" Winter Regional Northeast Nickel ppb 0 40 
+2018 2018 7 26 "Turkey breast, oven-roasted" Summer Regional West Nickel ppb 0 40 
+2018 2018 8 26 "Turkey breast, oven-roasted" Summer Regional Northeast Nickel ppb 0 40 
+2018 2018 9 26 "Turkey breast, oven-roasted" Summer Regional Southwest Nickel ppb 0 40 
+2018 2018 10 26 "Turkey breast, oven-roasted" Summer Regional Mid-Atlantic Nickel ppb 0 40 
+2018 2018 11 26 "Turkey breast, oven-roasted" Summer Regional West Nickel ppb 0 40 
+2018 2018 12 26 "Turkey breast, oven-roasted" Summer Regional North Central Nickel ppb 0 40 
+2019 2018 1 26 "Turkey breast, oven-roasted" Winter Regional West Nickel ppb 0 40 
+2019 2018 2 26 "Turkey breast, oven-roasted" Winter Regional Southeast Nickel ppb 0 40 
+2019 2018 3 26 "Turkey breast, oven-roasted" Winter Regional Northeast Nickel ppb 0 40 
+2019 2019 7 26 "Turkey breast, oven-roasted" Summer Regional Southeast Nickel ppb 0 40 
+2019 2019 8 26 "Turkey breast, oven-roasted" Summer Regional North Central Nickel ppb 0 40 
+2019 2019 9 26 "Turkey breast, oven-roasted" Summer Regional West Nickel ppb 0 40 
+2019 2019 10 26 "Turkey breast, oven-roasted" Summer Regional Northeast Nickel ppb 0 40 
+2019 2019 11 26 "Turkey breast, oven-roasted" Summer Regional Mid-Atlantic Nickel ppb 0 40 
+2019 2019 12 26 "Turkey breast, oven-roasted" Summer Regional Southwest Nickel ppb 0 40 
+2020 2019 1 26 "Turkey breast, oven-roasted" Winter Regional Northeast Nickel ppb 0 40 
+2020 2019 2 26 "Turkey breast, oven-roasted" Winter Regional Southwest Nickel ppb 0 40 
+2020 2019 3 26 "Turkey breast, oven-roasted" Winter Regional Mid-Atlantic Nickel ppb 0 40 
+2020 2020 4 26 "Turkey breast, oven-roasted" Winter Regional West Nickel ppb 0 40 
+2020 2020 5 26 "Turkey breast, oven-roasted" Winter Regional North Central Nickel ppb 0 40 
+2020 2020 6 26 "Turkey breast, oven-roasted" Winter Regional Southeast Nickel ppb 0 40 
+2018 2017 1 28 "Frankfurter (all beef/beef and pork), boiled" Winter Regional Mid-Atlantic Nickel ppb 0 40 
+2018 2017 2 28 "Frankfurter (all beef/beef and pork), boiled" Winter Regional North Central Nickel ppb 0 40 
+2018 2017 3 28 "Frankfurter (all beef/beef and pork), boiled" Winter Regional Southeast Nickel ppb 0 40 
+2018 2018 4 28 "Frankfurter (all beef/beef and pork), boiled" Winter Regional Southwest Nickel ppb 60 40 
+2018 2018 5 28 "Frankfurter (all beef/beef and pork), boiled" Winter Regional Southeast Nickel ppb 54 40 
+2018 2018 6 28 "Frankfurter (all beef/beef and pork), boiled" Winter Regional Northeast Nickel ppb 0 40 
+2018 2018 7 28 "Frankfurter (all beef/beef and pork), boiled" Summer Regional West Nickel ppb 0 40 
+2018 2018 8 28 "Frankfurter (all beef/beef and pork), boiled" Summer Regional Northeast Nickel ppb 0 40 
+2018 2018 9 28 "Frankfurter (all beef/beef and pork), boiled" Summer Regional Southwest Nickel ppb 0 40 
+2018 2018 10 28 "Frankfurter (all beef/beef and pork), boiled" Summer Regional Mid-Atlantic Nickel ppb 74 40 
+2018 2018 11 28 "Frankfurter (all beef/beef and pork), boiled" Summer Regional West Nickel ppb 76 40 
+2018 2018 12 28 "Frankfurter (all beef/beef and pork), boiled" Summer Regional North Central Nickel ppb 0 40 
+2019 2018 1 28 "Frankfurter (all beef/beef and pork), boiled" Winter Regional West Nickel ppb 0 40 
+2019 2018 2 28 "Frankfurter (all beef/beef and pork), boiled" Winter Regional Southeast Nickel ppb 46 40 
+2019 2018 3 28 "Frankfurter (all beef/beef and pork), boiled" Winter Regional Northeast Nickel ppb 0 40 
+2019 2019 7 28 "Frankfurter (all beef/beef and pork), boiled" Summer Regional Southeast Nickel ppb 0 40 
+2019 2019 8 28 "Frankfurter (all beef/beef and pork), boiled" Summer Regional North Central Nickel ppb 0 40 
+2019 2019 9 28 "Frankfurter (all beef/beef and pork), boiled" Summer Regional West Nickel ppb 0 40 
+2019 2019 10 28 "Frankfurter (all beef/beef and pork), boiled" Summer Regional Northeast Nickel ppb 0 40 
+2019 2019 11 28 "Frankfurter (all beef/beef and pork), boiled" Summer Regional Mid-Atlantic Nickel ppb 42 40 
+2019 2019 12 28 "Frankfurter (all beef/beef and pork), boiled" Summer Regional Southwest Nickel ppb 0 40 
+2020 2020 13 28 "Frankfurter (all beef/beef and pork), boiled" Winter National National Nickel ppb 0 40 
+2018 2018 13 29 "Luncheon meat, bologna" Summer National National Nickel ppb 0 40 
+2019 2019 13 29 "Luncheon meat, bologna" Winter National National Nickel ppb 0 40 
+2020 2020 13 29 "Luncheon meat, bologna" Winter National National Nickel ppb 0 40 
+2018 2018 13 34 "Fish sticks or patty, frozen, oven-cooked" Summer National National Nickel ppb 110 40 
+2019 2019 13 34 "Fish sticks or patty, frozen, oven-cooked" Winter National National Nickel ppb 89 40 
+2020 2020 13 34 "Fish sticks or patty, frozen, oven-cooked" Winter National National Nickel ppb 140 40 
+2018 2017 1 37 "Eggs, hard-boiled" Winter Regional Mid-Atlantic Nickel ppb 0 40 
+2018 2017 2 37 "Eggs, hard-boiled" Winter Regional North Central Nickel ppb 0 40 
+2018 2017 3 37 "Eggs, hard-boiled" Winter Regional Southeast Nickel ppb 0 40 
+2018 2018 4 37 "Eggs, hard-boiled" Winter Regional Southwest Nickel ppb 0 40 
+2018 2018 5 37 "Eggs, hard-boiled" Winter Regional Southeast Nickel ppb 0 40 
+2018 2018 6 37 "Eggs, hard-boiled" Winter Regional Northeast Nickel ppb 0 40 
+2018 2018 7 37 "Eggs, hard-boiled" Summer Regional West Nickel ppb 0 40 
+2018 2018 8 37 "Eggs, hard-boiled" Summer Regional Northeast Nickel ppb 0 40 
+2018 2018 9 37 "Eggs, hard-boiled" Summer Regional Southwest Nickel ppb 0 40 
+2018 2018 10 37 "Eggs, hard-boiled" Summer Regional Mid-Atlantic Nickel ppb 0 40 
+2018 2018 11 37 "Eggs, hard-boiled" Summer Regional West Nickel ppb 0 40 
+2018 2018 12 37 "Eggs, hard-boiled" Summer Regional North Central Nickel ppb 0 40 
+2019 2018 1 37 "Eggs, hard-boiled" Winter Regional West Nickel ppb 0 40 
+2019 2018 2 37 "Eggs, hard-boiled" Winter Regional Southeast Nickel ppb 0 40 
+2019 2018 3 37 "Eggs, hard-boiled" Winter Regional Northeast Nickel ppb 0 40 
+2019 2019 7 37 "Eggs, hard-boiled" Summer Regional Southeast Nickel ppb 0 40 
+2019 2019 8 37 "Eggs, hard-boiled" Summer Regional North Central Nickel ppb 0 40 
+2019 2019 9 37 "Eggs, hard-boiled" Summer Regional West Nickel ppb 0 40 
+2019 2019 10 37 "Eggs, hard-boiled" Summer Regional Northeast Nickel ppb 0 40 
+2019 2019 11 37 "Eggs, hard-boiled" Summer Regional Mid-Atlantic Nickel ppb 0 40 
+2019 2019 12 37 "Eggs, hard-boiled" Summer Regional Southwest Nickel ppb 0 40 
+2020 2019 1 37 "Eggs, hard-boiled" Winter Regional Northeast Nickel ppb 0 40 
+2020 2019 2 37 "Eggs, hard-boiled" Winter Regional Southwest Nickel ppb 0 40 
+2020 2019 3 37 "Eggs, hard-boiled" Winter Regional Mid-Atlantic Nickel ppb 0 40 
+2020 2020 4 37 "Eggs, hard-boiled" Winter Regional West Nickel ppb 0 40 
+2020 2020 5 37 "Eggs, hard-boiled" Winter Regional North Central Nickel ppb 0 40 
+2020 2020 6 37 "Eggs, hard-boiled" Winter Regional Southeast Nickel ppb 0 40 
+2018 2018 13 39 "Pork and beans, canned" Summer National National Nickel ppb 570 40 
+2019 2019 13 39 "Pork and beans, canned" Winter National National Nickel ppb 520 40 
+2020 2020 13 39 "Pork and beans, canned" Winter National National Nickel ppb 510 40 
+2018 2018 13 42 "Lima beans, immature, frozen, boiled" Summer National National Nickel ppb 910 40 
+2019 2019 13 42 "Lima beans, immature, frozen, boiled" Winter National National Nickel ppb 930 40 
+2018 2018 13 46 "Peas, green, frozen, boiled" Summer National National Nickel ppb 76 40 
+2019 2019 13 46 "Peas, green, frozen, boiled" Winter National National Nickel ppb 170 40 
+2020 2020 13 46 "Peas, green, frozen, boiled" Winter National National Nickel ppb 0 40 
+2018 2018 13 47 "Peanut butter, creamy" Summer National National Nickel ppb 450 40 
+2019 2019 13 47 "Peanut butter, creamy" Winter National National Nickel ppb 890 40 
+2020 2020 13 47 "Peanut butter, creamy" Winter National National Nickel ppb 460 40 
+2018 2018 13 48 "Peanuts, dry roasted, salted" Summer National National Nickel ppb 550 40 
+2019 2019 13 48 "Peanuts, dry roasted, salted" Winter National National Nickel ppb 440 40 
+2020 2020 13 48 "Peanuts, dry roasted, salted" Winter National National Nickel ppb 400 40 
+2018 2017 1 50 "Rice, white, enriched, cooked" Winter Regional Mid-Atlantic Nickel ppb 0 40 
+2018 2017 2 50 "Rice, white, enriched, cooked" Winter Regional North Central Nickel ppb 0 40 
+2018 2017 3 50 "Rice, white, enriched, cooked" Winter Regional Southeast Nickel ppb 0 40 
+2018 2018 4 50 "Rice, white, enriched, cooked" Winter Regional Southwest Nickel ppb 0 40 
+2018 2018 5 50 "Rice, white, enriched, cooked" Winter Regional Southeast Nickel ppb 0 40 
+2018 2018 6 50 "Rice, white, enriched, cooked" Winter Regional Northeast Nickel ppb 0 40 
+2018 2018 7 50 "Rice, white, enriched, cooked" Summer Regional West Nickel ppb 0 40 
+2018 2018 8 50 "Rice, white, enriched, cooked" Summer Regional Northeast Nickel ppb 0 40 
+2018 2018 9 50 "Rice, white, enriched, cooked" Summer Regional Southwest Nickel ppb 0 40 
+2018 2018 10 50 "Rice, white, enriched, cooked" Summer Regional Mid-Atlantic Nickel ppb 0 40 
+2018 2018 11 50 "Rice, white, enriched, cooked" Summer Regional West Nickel ppb 0 40 
+2018 2018 12 50 "Rice, white, enriched, cooked" Summer Regional North Central Nickel ppb 0 40 
+2019 2018 1 50 "Rice, white, enriched, cooked" Winter Regional West Nickel ppb 0 40 
+2019 2018 2 50 "Rice, white, enriched, cooked" Winter Regional Southeast Nickel ppb 53 40 
+2019 2018 3 50 "Rice, white, enriched, cooked" Winter Regional Northeast Nickel ppb 74 40 
+2019 2019 7 50 "Rice, white, enriched, cooked" Summer Regional Southeast Nickel ppb 57 40 
+2019 2019 8 50 "Rice, white, enriched, cooked" Summer Regional North Central Nickel ppb 170 40 
+2019 2019 9 50 "Rice, white, enriched, cooked" Summer Regional West Nickel ppb 44 40 
+2019 2019 10 50 "Rice, white, enriched, cooked" Summer Regional Northeast Nickel ppb 62 40 
+2019 2019 11 50 "Rice, white, enriched, cooked" Summer Regional Mid-Atlantic Nickel ppb 48 40 
+2019 2019 12 50 "Rice, white, enriched, cooked" Summer Regional Southwest Nickel ppb 41 40 
+2020 2019 1 50 "Rice, white, enriched, cooked" Winter Regional Northeast Nickel ppb 80 40 
+2020 2019 2 50 "Rice, white, enriched, cooked" Winter Regional Southwest Nickel ppb 0 40 
+2020 2019 3 50 "Rice, white, enriched, cooked" Winter Regional Mid-Atlantic Nickel ppb 49 40 
+2020 2020 4 50 "Rice, white, enriched, cooked" Winter Regional West Nickel ppb 57 40 
+2020 2020 5 50 "Rice, white, enriched, cooked" Winter Regional North Central Nickel ppb 0 40 
+2020 2020 6 50 "Rice, white, enriched, cooked" Winter Regional Southeast Nickel ppb 71 40 
+2018 2018 13 51 "Oatmeal, plain, quick, cooked" Summer National National Nickel ppb 260 40 
+2019 2019 13 51 "Oatmeal, plain, quick, cooked" Winter National National Nickel ppb 260 40 
+2020 2020 13 51 "Oatmeal, plain, quick, cooked" Winter National National Nickel ppb 310 40 
+2018 2018 13 52 "Cream of wheat (farina), enriched, cooked" Summer National National Nickel ppb 0 40 
+2019 2019 13 52 "Cream of wheat (farina), enriched, cooked" Winter National National Nickel ppb 0 40 
+2020 2020 13 52 "Cream of wheat (farina), enriched, cooked" Winter National National Nickel ppb 0 40 
+2018 2018 13 53 "Corn/hominy grits, enriched, cooked" Summer National National Nickel ppb 0 40 
+2019 2019 13 53 "Corn/hominy grits, enriched, cooked" Winter National National Nickel ppb 0 40 
+2020 2020 13 53 "Corn/hominy grits, enriched, cooked" Winter National National Nickel ppb 0 40 
+2018 2017 1 54 "Corn, frozen, boiled" Winter Regional Mid-Atlantic Nickel ppb 0 40 
+2018 2017 2 54 "Corn, frozen, boiled" Winter Regional North Central Nickel ppb 0 40 
+2018 2017 3 54 "Corn, frozen, boiled" Winter Regional Southeast Nickel ppb 0 40 
+2018 2018 4 54 "Corn, frozen, boiled" Winter Regional Southwest Nickel ppb 58 40 
+2018 2018 5 54 "Corn, frozen, boiled" Winter Regional Southeast Nickel ppb 0 40 
+2018 2018 6 54 "Corn, frozen, boiled" Winter Regional Northeast Nickel ppb 0 40 
+2018 2018 7 54 "Corn, frozen, boiled" Summer Regional West Nickel ppb 0 40 
+2018 2018 8 54 "Corn, frozen, boiled" Summer Regional Northeast Nickel ppb 0 40 
+2018 2018 9 54 "Corn, frozen, boiled" Summer Regional Southwest Nickel ppb 0 40 
+2018 2018 10 54 "Corn, frozen, boiled" Summer Regional Mid-Atlantic Nickel ppb 0 40 
+2018 2018 11 54 "Corn, frozen, boiled" Summer Regional West Nickel ppb 160 40 
+2018 2018 12 54 "Corn, frozen, boiled" Summer Regional North Central Nickel ppb 0 40 
+2019 2018 1 54 "Corn, frozen, boiled" Winter Regional West Nickel ppb 0 40 
+2019 2018 2 54 "Corn, frozen, boiled" Winter Regional Southeast Nickel ppb 0 40 
+2019 2018 3 54 "Corn, frozen, boiled" Winter Regional Northeast Nickel ppb 0 40 
+2019 2019 7 54 "Corn, frozen, boiled" Summer Regional Southeast Nickel ppb 0 40 
+2019 2019 8 54 "Corn, frozen, boiled" Summer Regional North Central Nickel ppb 0 40 
+2019 2019 9 54 "Corn, frozen, boiled" Summer Regional West Nickel ppb 0 40 
+2019 2019 10 54 "Corn, frozen, boiled" Summer Regional Northeast Nickel ppb 61 40 
+2019 2019 11 54 "Corn, frozen, boiled" Summer Regional Mid-Atlantic Nickel ppb 48 40 
+2019 2019 12 54 "Corn, frozen, boiled" Summer Regional Southwest Nickel ppb 0 40 
+2020 2019 1 54 "Corn, frozen, boiled" Winter Regional Northeast Nickel ppb 0 40 
+2020 2019 2 54 "Corn, frozen, boiled" Winter Regional Southwest Nickel ppb 0 40 
+2020 2019 3 54 "Corn, frozen, boiled" Winter Regional Mid-Atlantic Nickel ppb 0 40 
+2020 2020 4 54 "Corn, frozen, boiled" Winter Regional West Nickel ppb 0 40 
+2020 2020 5 54 "Corn, frozen, boiled" Winter Regional North Central Nickel ppb 0 40 
+2020 2020 6 54 "Corn, frozen, boiled" Winter Regional Southeast Nickel ppb 52 40 
+2018 2018 13 55 "Corn, canned, drained solids" Summer National National Nickel ppb 0 40 
+2019 2019 13 55 "Corn, canned, drained solids" Winter National National Nickel ppb 55 40 
+2020 2020 13 55 "Corn, canned, drained solids" Winter National National Nickel ppb 0 40 
+2018 2017 1 58 "Bread, white, enriched, pre-sliced" Winter Regional Mid-Atlantic Nickel ppb 74 40 
+2018 2017 2 58 "Bread, white, enriched, pre-sliced" Winter Regional North Central Nickel ppb 79 40 
+2018 2017 3 58 "Bread, white, enriched, pre-sliced" Winter Regional Southeast Nickel ppb 81 40 
+2018 2018 4 58 "Bread, white, enriched, pre-sliced" Winter Regional Southwest Nickel ppb 100 40 
+2018 2018 5 58 "Bread, white, enriched, pre-sliced" Winter Regional Southeast Nickel ppb 81 40 
+2018 2018 6 58 "Bread, white, enriched, pre-sliced" Winter Regional Northeast Nickel ppb 0 40 
+2018 2018 7 58 "Bread, white, enriched, pre-sliced" Summer Regional West Nickel ppb 62 40 
+2018 2018 8 58 "Bread, white, enriched, pre-sliced" Summer Regional Northeast Nickel ppb 110 40 
+2018 2018 9 58 "Bread, white, enriched, pre-sliced" Summer Regional Southwest Nickel ppb 61 40 
+2018 2018 10 58 "Bread, white, enriched, pre-sliced" Summer Regional Mid-Atlantic Nickel ppb 100 40 
+2018 2018 11 58 "Bread, white, enriched, pre-sliced" Summer Regional West Nickel ppb 89 40 
+2018 2018 12 58 "Bread, white, enriched, pre-sliced" Summer Regional North Central Nickel ppb 65 40 
+2019 2018 1 58 "Bread, white, enriched, pre-sliced" Winter Regional West Nickel ppb 84 40 
+2019 2018 2 58 "Bread, white, enriched, pre-sliced" Winter Regional Southeast Nickel ppb 120 40 
+2019 2018 3 58 "Bread, white, enriched, pre-sliced" Winter Regional Northeast Nickel ppb 88 40 
+2019 2019 7 58 "Bread, white, enriched, pre-sliced" Summer Regional Southeast Nickel ppb 120 40 
+2019 2019 8 58 "Bread, white, enriched, pre-sliced" Summer Regional North Central Nickel ppb 96 40 
+2019 2019 9 58 "Bread, white, enriched, pre-sliced" Summer Regional West Nickel ppb 97 40 
+2019 2019 10 58 "Bread, white, enriched, pre-sliced" Summer Regional Northeast Nickel ppb 75 40 
+2019 2019 11 58 "Bread, white, enriched, pre-sliced" Summer Regional Mid-Atlantic Nickel ppb 73 40 
+2019 2019 12 58 "Bread, white, enriched, pre-sliced" Summer Regional Southwest Nickel ppb 75 40 
+2020 2019 1 58 "Bread, white, enriched, pre-sliced" Winter Regional Northeast Nickel ppb 79 40 
+2020 2019 2 58 "Bread, white, enriched, pre-sliced" Winter Regional Southwest Nickel ppb 75 40 
+2020 2019 3 58 "Bread, white, enriched, pre-sliced" Winter Regional Mid-Atlantic Nickel ppb 75 40 
+2020 2020 4 58 "Bread, white, enriched, pre-sliced" Winter Regional West Nickel ppb 53 40 
+2020 2020 5 58 "Bread, white, enriched, pre-sliced" Winter Regional North Central Nickel ppb 96 40 
+2020 2020 6 58 "Bread, white, enriched, pre-sliced" Winter Regional Southeast Nickel ppb 70 40 
+2018 2018 13 60 "Cornbread, homemade" Summer National National Nickel ppb 180 40 
+2019 2019 13 60 "Cornbread, homemade" Winter National National Nickel ppb 170 40 
+2020 2020 13 60 "Cornbread, homemade" Winter National National Nickel ppb 140 40 
+2018 2017 1 62 "Bread, whole wheat, pre-sliced" Winter Regional Mid-Atlantic Nickel ppb 220 40 
+2018 2017 2 62 "Bread, whole wheat, pre-sliced" Winter Regional North Central Nickel ppb 160 40 
+2018 2017 3 62 "Bread, whole wheat, pre-sliced" Winter Regional Southeast Nickel ppb 140 40 
+2018 2018 4 62 "Bread, whole wheat, pre-sliced" Winter Regional Southwest Nickel ppb 210 40 
+2018 2018 5 62 "Bread, whole wheat, pre-sliced" Winter Regional Southeast Nickel ppb 200 40 
+2018 2018 6 62 "Bread, whole wheat, pre-sliced" Winter Regional Northeast Nickel ppb 170 40 
+2018 2018 7 62 "Bread, whole wheat, pre-sliced" Summer Regional West Nickel ppb 150 40 
+2018 2018 8 62 "Bread, whole wheat, pre-sliced" Summer Regional Northeast Nickel ppb 200 40 
+2018 2018 9 62 "Bread, whole wheat, pre-sliced" Summer Regional Southwest Nickel ppb 160 40 
+2018 2018 10 62 "Bread, whole wheat, pre-sliced" Summer Regional Mid-Atlantic Nickel ppb 160 40 
+2018 2018 11 62 "Bread, whole wheat, pre-sliced" Summer Regional West Nickel ppb 150 40 
+2018 2018 12 62 "Bread, whole wheat, pre-sliced" Summer Regional North Central Nickel ppb 160 40 
+2019 2018 1 62 "Bread, whole wheat, pre-sliced" Winter Regional West Nickel ppb 180 40 
+2019 2018 2 62 "Bread, whole wheat, pre-sliced" Winter Regional Southeast Nickel ppb 250 40 
+2019 2018 3 62 "Bread, whole wheat, pre-sliced" Winter Regional Northeast Nickel ppb 190 40 
+2019 2019 7 62 "Bread, whole wheat, pre-sliced" Summer Regional Southeast Nickel ppb 200 40 
+2019 2019 8 62 "Bread, whole wheat, pre-sliced" Summer Regional North Central Nickel ppb 220 40 
+2019 2019 9 62 "Bread, whole wheat, pre-sliced" Summer Regional West Nickel ppb 190 40 
+2019 2019 10 62 "Bread, whole wheat, pre-sliced" Summer Regional Northeast Nickel ppb 190 40 
+2019 2019 11 62 "Bread, whole wheat, pre-sliced" Summer Regional Mid-Atlantic Nickel ppb 200 40 
+2019 2019 12 62 "Bread, whole wheat, pre-sliced" Summer Regional Southwest Nickel ppb 250 40 
+2020 2019 1 62 "Bread, whole wheat, pre-sliced" Winter Regional Northeast Nickel ppb 170 40 
+2020 2019 2 62 "Bread, whole wheat, pre-sliced" Winter Regional Southwest Nickel ppb 160 40 
+2020 2019 3 62 "Bread, whole wheat, pre-sliced" Winter Regional Mid-Atlantic Nickel ppb 140 40 
+2020 2020 4 62 "Bread, whole wheat, pre-sliced" Winter Regional West Nickel ppb 180 40 
+2020 2020 5 62 "Bread, whole wheat, pre-sliced" Winter Regional North Central Nickel ppb 150 40 
+2020 2020 6 62 "Bread, whole wheat, pre-sliced" Winter Regional Southeast Nickel ppb 200 40 
+2018 2017 1 63 "Tortilla, flour" Winter Regional Mid-Atlantic Nickel ppb 68 40 

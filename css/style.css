@@ -1,0 +1,675 @@
+/* NickelTrack — clean minimal */
+
+:root {
+  --color-bg: #fafaf9;
+  --color-surface: #ffffff;
+  --color-border: #e7e5e4;
+  --color-text: #1c1917;
+  --color-text-muted: #78716c;
+  --color-accent: #0d9488;
+  --color-accent-hover: #0f766e;
+  --color-accent-subtle: #ccfbf1;
+  /* Nickel band traffic-light colors */
+  --band-very-low: #22c55e;
+  --band-low: #84cc16;
+  --band-medium: #eab308;
+  --band-high: #dc2626;
+  --band-very-low-bg: #dcfce7;
+  --band-low-bg: #ecfccb;
+  --band-medium-bg: #fef9c3;
+  --band-high-bg: #fee2e2;
+  --radius: 8px;
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --font: "DM Sans", system-ui, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--color-text);
+  background: var(--color-bg);
+  min-height: 100vh;
+}
+
+/* Header */
+.site-header {
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-lg) var(--space-md);
+}
+
+.header-inner {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.logo {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.tagline {
+  margin: var(--space-xs) 0 var(--space-md);
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.header-settings {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.header-settings-label {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.units-toggle {
+  display: inline-flex;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.units-btn {
+  padding: var(--space-xs) var(--space-md);
+  font-family: var(--font);
+  font-size: 0.85rem;
+  font-weight: 500;
+  border: none;
+  background: var(--color-bg);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.units-btn:hover {
+  color: var(--color-text);
+  background: var(--color-border);
+}
+
+.units-btn.is-active {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.main-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.nav-link {
+  padding: var(--space-sm) var(--space-md);
+  color: var(--color-text-muted);
+  text-decoration: none;
+  border-radius: var(--radius);
+  font-weight: 500;
+  transition: color 0.15s, background 0.15s;
+}
+
+.nav-link:hover {
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+
+.nav-link.is-active {
+  color: var(--color-accent);
+  background: var(--color-accent-subtle);
+}
+
+/* Main content */
+.main-content {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-md);
+}
+
+.page-section {
+  display: none;
+}
+
+.page-section.is-visible {
+  display: block;
+}
+
+.section-heading {
+  margin: 0 0 var(--space-lg);
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.section-intro {
+  margin: 0 0 var(--space-lg);
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+
+/* Cards */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+
+.daily-summary h3,
+.meal-card h4 {
+  margin: 0 0 var(--space-md);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.meal-describe {
+  margin-bottom: var(--space-md);
+  width: 100%;
+}
+
+.meal-desc-input {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  min-height: 2.5rem;
+  resize: vertical;
+  margin-bottom: var(--space-md);
+  display: block;
+  box-sizing: border-box;
+}
+
+/* Override .input max-width so the meal textarea spans the full card */
+.meal-describe .meal-desc-input.input {
+  max-width: none;
+  width: 100%;
+}
+
+.meal-describe .btn-suggest-foods {
+  display: block;
+  width: 100%;
+  margin-top: 0;
+}
+
+/* Disambiguation modal */
+.disambiguate-query {
+  margin: 0 0 var(--space-md);
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+}
+
+.disambiguate-list {
+  list-style: none;
+  margin: 0 0 var(--space-md);
+  padding: 0;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+.disambiguate-list li {
+  margin-bottom: var(--space-xs);
+}
+
+.disambiguate-option {
+  display: block;
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  text-align: left;
+  font-family: var(--font);
+  font-size: 0.95rem;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.disambiguate-option:hover {
+  background: var(--color-accent-subtle);
+  border-color: var(--color-accent);
+}
+
+.disambiguate-option .option-name {
+  font-weight: 500;
+}
+
+.disambiguate-option .option-meta {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-top: 0.15rem;
+}
+
+/* Per-meal "Not found in database" (inside each meal card) */
+.meal-unmatched {
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+}
+
+.meal-unmatched .unmatched-intro {
+  margin: 0 0 var(--space-xs);
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.meal-unmatched .unmatched-list {
+  list-style: disc;
+  margin: 0;
+  padding-left: var(--space-lg);
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.unmatched-intro {
+  margin: 0 0 var(--space-sm);
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.unmatched-list {
+  list-style: disc;
+  margin: 0;
+  padding-left: var(--space-lg);
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.daily-summary .nickel-display {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-sm);
+}
+
+.nickel-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.nickel-unit {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.nickel-divider {
+  margin: 0 var(--space-xs);
+  color: var(--color-text-muted);
+}
+
+.daily-summary .hint {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+/* Meals list */
+.meals-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.meal-entries {
+  list-style: none;
+  margin: 0 0 var(--space-md);
+  padding: 0;
+}
+
+.meal-entries li {
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.95rem;
+}
+
+.meal-entries li:last-child {
+  border-bottom: none;
+}
+
+.meal-entry-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.meal-entry-info {
+  flex: 1 1 12rem;
+  min-width: 0;
+}
+
+.meal-entry-name {
+  font-weight: 500;
+}
+
+.meal-entry-meta {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-top: 0.15rem;
+}
+
+.meal-entry-servings {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.meal-entry-servings label {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.meal-entry-servings select {
+  padding: 0.2em 0.5em;
+  font-size: 0.9rem;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background: var(--color-surface);
+}
+
+.meal-entry-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.btn-remove-entry {
+  padding: 0.25em 0.5em;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-remove-entry:hover {
+  color: var(--band-high);
+  border-color: var(--band-high);
+  background: var(--band-high-bg);
+}
+
+/* Nickel band badges (traffic-light) */
+.band-badge {
+  display: inline-block;
+  padding: 0.2em 0.5em;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-right: 0.35rem;
+}
+
+.band-very_low { background: var(--band-very-low-bg); color: #166534; }
+.band-low       { background: var(--band-low-bg);       color: #4d7c0f; }
+.band-medium    { background: var(--band-medium-bg);    color: #854d0e; }
+.band-high      { background: var(--band-high-bg);      color: #991b1b; }
+
+.food-result.band-very_low { border-left: 4px solid var(--band-very-low); }
+.food-result.band-low      { border-left: 4px solid var(--band-low); }
+.food-result.band-medium   { border-left: 4px solid var(--band-medium); }
+.food-result.band-high     { border-left: 4px solid var(--band-high); }
+
+.meal-entries li.meal-entry-row.band-very_low { border-left: 3px solid var(--band-very-low); padding-left: calc(var(--space-sm) + 3px); }
+.meal-entries li.meal-entry-row.band-low      { border-left: 3px solid var(--band-low);      padding-left: calc(var(--space-sm) + 3px); }
+.meal-entries li.meal-entry-row.band-medium   { border-left: 3px solid var(--band-medium);   padding-left: calc(var(--space-sm) + 3px); }
+.meal-entries li.meal-entry-row.band-high     { border-left: 3px solid var(--band-high);     padding-left: calc(var(--space-sm) + 3px); }
+
+.meal-entries .empty-hint {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-sm) var(--space-md);
+  font-family: var(--font);
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: var(--radius);
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.btn-primary {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--color-accent-hover);
+}
+
+.btn-secondary {
+  background: var(--color-bg);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+.btn-secondary:hover {
+  background: var(--color-border);
+}
+
+.add-entry {
+  margin-top: var(--space-sm);
+}
+
+/* Recipes grid */
+.recipes-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.empty-state p {
+  margin: 0 0 var(--space-md);
+}
+
+/* Planner */
+.planner-controls {
+  margin-bottom: var(--space-lg);
+}
+
+.planner-controls label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.label-text {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+.input {
+  max-width: 12rem;
+  padding: var(--space-sm) var(--space-md);
+  font-family: var(--font);
+  font-size: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+}
+
+.input-search {
+  max-width: none;
+  width: 100%;
+}
+
+.search-bar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.search-status {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.search-results,
+.modal-results {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+}
+
+.food-result {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.food-result-name {
+  font-weight: 500;
+  flex: 1 1 12rem;
+}
+
+.food-result-meta {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.food-serving-size,
+.meal-entry-serving-size {
+  font-weight: normal;
+  color: var(--color-text-muted);
+  font-size: 0.9em;
+}
+
+.food-result .btn-add-food {
+  flex-shrink: 0;
+}
+
+.database-load-error {
+  margin-top: var(--space-lg);
+  color: var(--color-text-muted);
+}
+
+.database-load-error code {
+  font-size: 0.9em;
+  background: var(--color-bg);
+  padding: 0.1em 0.3em;
+  border-radius: 4px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: var(--space-xl);
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.modal-overlay[hidden] {
+  display: none;
+}
+
+.modal {
+  width: 100%;
+  max-width: 540px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.modal-title {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.modal-meal-name {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+}
+
+.modal-results {
+  max-height: 40vh;
+  overflow-y: auto;
+  margin-top: 0;
+}
+
+.modal-cancel {
+  align-self: flex-start;
+}
+
+/* Resources */
+.resources-list {
+  list-style: none;
+  margin: 0 0 var(--space-lg);
+  padding: 0;
+}
+
+.resource-card {
+  margin-bottom: var(--space-md);
+}
+
+.resource-link {
+  display: block;
+  font-weight: 500;
+  color: var(--color-accent);
+  text-decoration: none;
+  margin-bottom: var(--space-xs);
+}
+
+.resource-link:hover {
+  text-decoration: underline;
+}
+
+.resource-desc {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  line-height: 1.45;
+}
