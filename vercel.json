@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/api/parse-meal", "destination": "/api/parse_meal" },
+    { "source": "/api/pick-food", "destination": "/api/pick_food" }
+  ]
+}
