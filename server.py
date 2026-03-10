@@ -10,6 +10,12 @@ import json
 import os
 import re
 
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
 from flask import Flask, request, send_from_directory
 
 app = Flask(__name__, static_folder=".", static_url_path="")

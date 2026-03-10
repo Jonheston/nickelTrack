@@ -136,20 +136,8 @@
   }
 
   // --- Serving units: US (volume when possible, else oz) vs metric (g) ---
-  const SERVING_UNITS_KEY = "nickeltrack-serving-units";
-  function getServingUnits() {
-    try {
-      const v = localStorage.getItem(SERVING_UNITS_KEY);
-      return (v === "metric" || v === "us") ? v : "us";
-    } catch (_) {
-      return "us";
-    }
-  }
-  function setServingUnits(val) {
-    try {
-      localStorage.setItem(SERVING_UNITS_KEY, val === "metric" ? "metric" : "us");
-    } catch (_) {}
-  }
+  function getServingUnits() { return DataStore.getServingUnits(); }
+  function setServingUnits(val) { DataStore.setServingUnits(val); }
   // US volume approximations (grams → cup/tbsp/tsp); else oz (1 oz ≈ 28.35 g)
   var US_VOLUME_MAP = [
     [5, "1 tsp"], [15, "1 tbsp"], [30, "2 tbsp"], [45, "3 tbsp"],
@@ -238,7 +226,7 @@
 
   function getSectionFromHash() {
     const hash = (window.location.hash || "#meal-tracking").slice(1);
-    return ["meal-tracking", "food-database", "recipes", "meal-planner", "resources"].includes(hash)
+    return ["meal-tracking", "food-database", "recipes", "meal-planner", "analytics", "resources"].includes(hash)
       ? hash
       : "meal-tracking";
   }
@@ -288,7 +276,6 @@
   }
 
   // --- Meal entries: persistence and rendering (servings, remove, band) ---
-  const MEAL_ENTRIES_KEY = "nickeltrack-meal-entries";
   const SERVING_OPTIONS = [0.5, 1, 1.5, 2, 2.5, 3];
 
   function getTodayDate() {
@@ -308,45 +295,11 @@
 
   var selectedDate = getTodayDate();
 
-  function getStoredEntries() {
-    try {
-      const raw = localStorage.getItem(MEAL_ENTRIES_KEY);
-      return raw ? JSON.parse(raw) : {};
-    } catch (_) {
-      return {};
-    }
-  }
-
-  function setStoredEntries(data) {
-    try {
-      localStorage.setItem(MEAL_ENTRIES_KEY, JSON.stringify(data));
-    } catch (_) {}
-  }
-
-  function getMealEntriesForDate(date) {
-    const all = getStoredEntries();
-    const d = date || getTodayDate();
-    if (!all[d]) all[d] = { breakfast: [], lunch: [], dinner: [], snacks: [] };
-    return all[d];
-  }
-
-  function saveMealEntriesForDate(date, mealData) {
-    const all = getStoredEntries();
-    all[date || getTodayDate()] = mealData;
-    setStoredEntries(all);
-  }
-
-  function getTotalNickelForDate(date) {
-    var mealData = getMealEntriesForDate(date);
-    var total = 0;
-    ["breakfast", "lunch", "dinner", "snacks"].forEach(function (meal) {
-      var arr = mealData[meal] || [];
-      arr.forEach(function (entry) {
-        total += (entry.nickelUgPerServing || 0) * (entry.servings || 1);
-      });
-    });
-    return Math.round(total * 10) / 10;
-  }
+  function getStoredEntries() { return DataStore.getStoredEntries(); }
+  function setStoredEntries(data) { DataStore.setStoredEntries(data); }
+  function getMealEntriesForDate(date) { return DataStore.getMealEntriesForDate(date || getTodayDate()); }
+  function saveMealEntriesForDate(date, mealData) { DataStore.saveMealEntriesForDate(date || getTodayDate(), mealData); }
+  function getTotalNickelForDate(date) { return DataStore.getTotalNickelForDate(date); }
 
   function setSelectedDate(dateStr) {
     selectedDate = dateStr || getTodayDate();
@@ -616,6 +569,7 @@
     history.replaceState(null, "", "#" + sectionId);
     if (sectionId === "food-database") onShowFoodDatabase();
     if (sectionId === "recipes") { loadFoodDatabase().then(renderRecipes).catch(function () {}); }
+    if (sectionId === "analytics" && typeof NickelTrackAnalytics !== "undefined") { NickelTrackAnalytics.refresh(); }
     if (sectionId === "meal-planner") {
       if (!currentPlanWeek) {
         currentPlanWeek = getCurrentWeekStr();
@@ -663,20 +617,8 @@
 
   if (todayGoalEl) todayGoalEl.textContent = DAILY_GOAL_DEFAULT;
 
-  function getStoredGoal() {
-    try {
-      const v = localStorage.getItem("nickeltrack-daily-goal");
-      return v != null ? parseInt(v, 10) : DAILY_GOAL_DEFAULT;
-    } catch (_) {
-      return DAILY_GOAL_DEFAULT;
-    }
-  }
-
-  function setStoredGoal(µg) {
-    try {
-      localStorage.setItem("nickeltrack-daily-goal", String(µg));
-    } catch (_) {}
-  }
+  function getStoredGoal() { return DataStore.getStoredGoal(); }
+  function setStoredGoal(µg) { DataStore.setStoredGoal(µg); }
 
   function recomputeDailyTotal() {
     if (!todayTotalEl) return;
@@ -1056,18 +998,9 @@
   });
 
   // --- Recipes: full CRUD ---
-  var RECIPES_KEY = "nickeltrack-recipes";
-
-  function getStoredRecipes() {
-    try { var raw = localStorage.getItem(RECIPES_KEY); return raw ? JSON.parse(raw) : []; }
-    catch (_) { return []; }
-  }
-  function setStoredRecipes(recipes) {
-    try { localStorage.setItem(RECIPES_KEY, JSON.stringify(recipes)); } catch (_) {}
-  }
-  function deleteRecipe(id) {
-    setStoredRecipes(getStoredRecipes().filter(function (r) { return r.id !== id; }));
-  }
+  function getStoredRecipes() { return DataStore.getStoredRecipes(); }
+  function setStoredRecipes(recipes) { DataStore.setStoredRecipes(recipes); }
+  function deleteRecipe(id) { DataStore.deleteRecipe(id); }
   function getRecipeNickelTotal(recipe) {
     var total = 0;
     (recipe.ingredients || []).forEach(function (ing) {
@@ -1323,24 +1256,12 @@
   })();
 
   // --- Meal Planner ---
-  var MEAL_PLAN_KEY = "nickeltrack-meal-plan";
   var currentPlanWeek = null;
 
-  function getStoredPlan() {
-    try { var raw = localStorage.getItem(MEAL_PLAN_KEY); return raw ? JSON.parse(raw) : {}; }
-    catch (_) { return {}; }
-  }
-  function setStoredPlan(plan) {
-    try { localStorage.setItem(MEAL_PLAN_KEY, JSON.stringify(plan)); } catch (_) {}
-  }
-  function getPlanForWeek(weekKey) {
-    return getStoredPlan()[weekKey] || {};
-  }
-  function savePlanForWeek(weekKey, weekData) {
-    var plan = getStoredPlan();
-    plan[weekKey] = weekData;
-    setStoredPlan(plan);
-  }
+  function getStoredPlan() { return DataStore.getStoredPlan(); }
+  function setStoredPlan(plan) { DataStore.setStoredPlan(plan); }
+  function getPlanForWeek(weekKey) { return DataStore.getPlanForWeek(weekKey); }
+  function savePlanForWeek(weekKey, weekData) { DataStore.savePlanForWeek(weekKey, weekData); }
 
   function getCurrentWeekStr() {
     var now = new Date();
@@ -1610,4 +1531,21 @@
       list.appendChild(li);
     });
   }
+
+  // --- Expose reRender for auth module ---
+  function reRenderApp() {
+    loadAndRenderAllMeals();
+    renderGoal();
+    updateDateNavLabel();
+    renderCalendar();
+    renderRecipes();
+    if (currentPlanWeek) renderPlannerGrid();
+    updateUnitsToggleActive();
+    // Refresh analytics if visible
+    if (typeof NickelTrackAnalytics !== "undefined" && NickelTrackAnalytics.refresh) {
+      NickelTrackAnalytics.refresh();
+    }
+  }
+
+  window.NickelTrackApp = { reRender: reRenderApp };
 })();
