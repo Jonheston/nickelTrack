@@ -276,7 +276,63 @@
   }
 
   // --- Meal entries: persistence and rendering (servings, remove, band) ---
-  const SERVING_OPTIONS = [0.5, 1, 1.5, 2, 2.5, 3];
+
+  // Unit conversion constants (water-density approximations)
+  var UNIT_TO_GRAMS = { serving: null, g: 1, oz: 28.35, cup: 240, tbsp: 15, tsp: 5 };
+  var UNIT_LABELS = { serving: "serving", g: "g", oz: "oz", cup: "cup", tbsp: "tbsp", tsp: "tsp" };
+  var UNIT_KEYS = ["serving", "g", "oz", "cup", "tbsp", "tsp"];
+
+  /**
+   * Convert user-entered amount + unit into a servings multiplier.
+   * servingSizeG = the food's canonical serving_size_g from the database.
+   */
+  function computeServingsMultiplier(amount, unit, servingSizeG) {
+    if (unit === "serving" || !servingSizeG || servingSizeG <= 0) {
+      return amount; // direct multiplier
+    }
+    var gramsPerUnit = UNIT_TO_GRAMS[unit] || 1;
+    var totalGrams = amount * gramsPerUnit;
+    return totalGrams / servingSizeG;
+  }
+
+  /** Pick a sensible default unit based on serving_size_g. */
+  function getDefaultUnit(servingSizeG) {
+    if (servingSizeG == null || servingSizeG <= 0) return "serving";
+    if (getServingUnits() === "metric") return "g";
+    for (var i = 0; i < US_VOLUME_MAP.length; i++) {
+      var diff = Math.abs(servingSizeG - US_VOLUME_MAP[i][0]);
+      if (diff < 3 || diff <= US_VOLUME_MAP[i][0] * 0.15) {
+        var g = US_VOLUME_MAP[i][0];
+        if (g <= 5) return "tsp";
+        if (g <= 15) return "tbsp";
+        return "cup";
+      }
+    }
+    return "serving";
+  }
+
+  /** Pick a sensible default amount for the given unit. */
+  function getDefaultAmount(servingSizeG, unit) {
+    if (unit === "serving") return 1;
+    if (servingSizeG == null || servingSizeG <= 0) return 1;
+    if (unit === "g") return Math.round(servingSizeG);
+    var gramsPerUnit = UNIT_TO_GRAMS[unit] || 1;
+    var amount = servingSizeG / gramsPerUnit;
+    return Math.round(amount * 4) / 4; // quarter precision
+  }
+
+  /** Build the unit <option> elements for a given food. */
+  function buildUnitOptions(servingSizeG, selectedUnit) {
+    var servingLabel = "serving";
+    if (servingSizeG != null && servingSizeG > 0) {
+      var vol = formatServingSize(servingSizeG);
+      if (vol) servingLabel = "serving (" + vol + ")";
+    }
+    return UNIT_KEYS.map(function (u) {
+      var label = u === "serving" ? servingLabel : UNIT_LABELS[u];
+      return '<option value="' + u + '"' + (selectedUnit === u ? ' selected' : '') + '>' + escapeHtml(label) + '</option>';
+    }).join("");
+  }
 
   function getTodayDate() {
     var d = new Date();
@@ -396,13 +452,17 @@
 
   function buildEntryFromFood(food) {
     var servingG = food.serving_size_g != null ? food.serving_size_g : (food.nickel_ug_per_100g != null ? 100 : null);
+    var defaultUnit = getDefaultUnit(servingG);
+    var defaultAmount = getDefaultAmount(servingG, defaultUnit);
     return {
       foodId: food.id,
       name_en: food.name_en || food.id,
       nickelUgPerServing: nickelUgForFood(food),
-      servings: 1,
+      servings: computeServingsMultiplier(defaultAmount, defaultUnit, servingG),
       nickel_band: food.nickel_band || null,
       serving_size_g: servingG,
+      display_unit: defaultUnit,
+      display_amount: defaultAmount,
     };
   }
 
@@ -418,22 +478,21 @@
     li.setAttribute("data-servings", String(entry.servings));
     li.setAttribute("data-nickel-total", String(total));
     li.className = "meal-entry-row" + (bandId ? " band-" + bandId : "");
-    var servingOpts = SERVING_OPTIONS.map(function (s) {
-      return "<option value=\"" + s + "\"" + (entry.servings === s ? " selected" : "") + ">" + s + "</option>";
-    }).join("");
-    var entryServingStr = (entry.serving_size_g != null && entry.serving_size_g > 0) ? formatServingSize(entry.serving_size_g) : "";
+    // Backward compat: old entries lack display_unit/display_amount
+    var displayUnit = entry.display_unit || "serving";
+    var displayAmount = entry.display_amount != null ? entry.display_amount : entry.servings;
+    var unitOpts = buildUnitOptions(entry.serving_size_g, displayUnit);
     li.innerHTML =
       "<div class=\"meal-entry-info\">" +
         "<div class=\"meal-entry-name\">" +
           (bandId ? "<span class=\"band-badge band-" + bandId + "\">" + escapeHtml(bandLabel) + "</span> " : "") +
           escapeHtml(entry.name_en) +
-          (entryServingStr ? " <span class=\"meal-entry-serving-size\">(" + escapeHtml(entryServingStr) + ")</span>" : "") +
         "</div>" +
         "<div class=\"meal-entry-meta\">" + total + " µg</div>" +
       "</div>" +
-      "<div class=\"meal-entry-servings\">" +
-        "<label for=\"servings-" + meal + "-" + index + "\">Servings</label>" +
-        "<select id=\"servings-" + meal + "-" + index + "\" class=\"meal-servings-select\" data-meal=\"" + escapeHtml(meal) + "\" data-index=\"" + index + "\">" + servingOpts + "</select>" +
+      "<div class=\"meal-entry-quantity\">" +
+        "<input type=\"number\" class=\"quantity-amount-input\" id=\"qty-amt-" + meal + "-" + index + "\" value=\"" + displayAmount + "\" min=\"0.01\" step=\"0.25\" data-meal=\"" + escapeHtml(meal) + "\" data-index=\"" + index + "\" />" +
+        "<select class=\"quantity-unit-select\" id=\"qty-unit-" + meal + "-" + index + "\" data-meal=\"" + escapeHtml(meal) + "\" data-index=\"" + index + "\">" + unitOpts + "</select>" +
       "</div>" +
       "<div class=\"meal-entry-actions\">" +
         "<button type=\"button\" class=\"btn-remove-entry\" data-meal=\"" + escapeHtml(meal) + "\" data-index=\"" + index + "\" aria-label=\"Remove\">Remove</button>" +
@@ -474,26 +533,79 @@
         renderCalendar();
       });
     });
-    list.querySelectorAll(".meal-servings-select").forEach(function (select) {
-      select.addEventListener("change", function () {
-        const idx = parseInt(select.getAttribute("data-index"), 10);
-        const newServings = parseFloat(select.value, 10);
-        const mealData = getMealEntriesForDate(selectedDate);
-        const arr = mealData[meal] || [];
-        if (arr[idx]) {
-          arr[idx].servings = newServings;
-          saveMealEntriesForDate(selectedDate, mealData);
-          var li = list.querySelector("li[data-entry-index=\"" + idx + "\"]");
-          if (li) {
-            var total = Math.round(arr[idx].nickelUgPerServing * newServings * 10) / 10;
-            li.setAttribute("data-servings", String(newServings));
-            li.setAttribute("data-nickel-total", String(total));
-            var meta = li.querySelector(".meal-entry-meta");
-            if (meta) meta.textContent = total + " µg";
-          }
-          recomputeDailyTotal();
-          renderCalendar();
+    // Quantity amount input change handler
+    list.querySelectorAll(".quantity-amount-input").forEach(function (input) {
+      input.addEventListener("change", function () {
+        var idx = parseInt(input.getAttribute("data-index"), 10);
+        var mealData = getMealEntriesForDate(selectedDate);
+        var arr = mealData[meal] || [];
+        if (!arr[idx]) return;
+        var amount = parseFloat(input.value) || 0;
+        if (amount < 0.01) { amount = 0.01; input.value = amount; }
+        var unitSelect = list.querySelector('.quantity-unit-select[data-index="' + idx + '"]');
+        var unit = unitSelect ? unitSelect.value : "serving";
+        var servingSizeG = arr[idx].serving_size_g || 100;
+        var newServings = computeServingsMultiplier(amount, unit, servingSizeG);
+        arr[idx].servings = newServings;
+        arr[idx].display_unit = unit;
+        arr[idx].display_amount = amount;
+        saveMealEntriesForDate(selectedDate, mealData);
+        var li = list.querySelector('li[data-entry-index="' + idx + '"]');
+        if (li) {
+          var total = Math.round(arr[idx].nickelUgPerServing * newServings * 10) / 10;
+          li.setAttribute("data-servings", String(newServings));
+          li.setAttribute("data-nickel-total", String(total));
+          var meta = li.querySelector(".meal-entry-meta");
+          if (meta) meta.textContent = total + " µg";
         }
+        recomputeDailyTotal();
+        renderCalendar();
+      });
+    });
+    // Unit dropdown change handler — auto-converts amount to maintain same total grams
+    list.querySelectorAll(".quantity-unit-select").forEach(function (select) {
+      select.addEventListener("change", function () {
+        var idx = parseInt(select.getAttribute("data-index"), 10);
+        var mealData = getMealEntriesForDate(selectedDate);
+        var arr = mealData[meal] || [];
+        if (!arr[idx]) return;
+        var amountInput = list.querySelector('.quantity-amount-input[data-index="' + idx + '"]');
+        var oldAmount = amountInput ? parseFloat(amountInput.value) || 1 : 1;
+        var oldUnit = arr[idx].display_unit || "serving";
+        var newUnit = select.value;
+        var servingSizeG = arr[idx].serving_size_g || 100;
+        // Convert old amount to grams, then to new unit
+        var oldGrams;
+        if (oldUnit === "serving") {
+          oldGrams = oldAmount * servingSizeG;
+        } else {
+          oldGrams = oldAmount * (UNIT_TO_GRAMS[oldUnit] || 1);
+        }
+        var newAmount;
+        if (newUnit === "serving") {
+          newAmount = oldGrams / servingSizeG;
+        } else {
+          newAmount = oldGrams / (UNIT_TO_GRAMS[newUnit] || 1);
+        }
+        // Round nicely
+        newAmount = Math.round(newAmount * 100) / 100;
+        if (newAmount < 0.01) newAmount = 0.01;
+        if (amountInput) amountInput.value = newAmount;
+        var newServings = computeServingsMultiplier(newAmount, newUnit, servingSizeG);
+        arr[idx].servings = newServings;
+        arr[idx].display_unit = newUnit;
+        arr[idx].display_amount = newAmount;
+        saveMealEntriesForDate(selectedDate, mealData);
+        var li = list.querySelector('li[data-entry-index="' + idx + '"]');
+        if (li) {
+          var total = Math.round(arr[idx].nickelUgPerServing * newServings * 10) / 10;
+          li.setAttribute("data-servings", String(newServings));
+          li.setAttribute("data-nickel-total", String(total));
+          var meta = li.querySelector(".meal-entry-meta");
+          if (meta) meta.textContent = total + " µg";
+        }
+        recomputeDailyTotal();
+        renderCalendar();
       });
     });
   }
@@ -997,6 +1109,247 @@
     });
   });
 
+  // --- Image recognition (photo → AI → identify foods) ---
+
+  function getAnalyzeImageApiUrl() {
+    if (typeof window !== "undefined" && window.location && window.location.protocol !== "file:") {
+      return window.location.origin + "/api/analyze-image";
+    }
+    return "http://localhost:5000/api/analyze-image";
+  }
+
+  /** Reusable helper: add a matched food to a meal for the selected date. */
+  function addFoodToMeal(meal, food) {
+    if (!meal || !food) return;
+    var mealData = getMealEntriesForDate(selectedDate);
+    var arr = mealData[meal] || [];
+    arr.push(buildEntryFromFood(food));
+    mealData[meal] = arr;
+    saveMealEntriesForDate(selectedDate, mealData);
+    renderMealList(meal, arr);
+    recomputeDailyTotal();
+    renderCalendar();
+  }
+
+  /** Resize image client-side to keep base64 payload under Vercel limits. */
+  function resizeImageIfNeeded(base64, maxWidth, callback) {
+    var img = new Image();
+    img.onload = function () {
+      if (img.width <= maxWidth) { callback(base64); return; }
+      var canvas = document.createElement("canvas");
+      var scale = maxWidth / img.width;
+      canvas.width = maxWidth;
+      canvas.height = Math.round(img.height * scale);
+      canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+      callback(canvas.toDataURL("image/jpeg", 0.8));
+    };
+    img.onerror = function () { callback(base64); };
+    img.src = base64;
+  }
+
+  var imageInput = document.getElementById("image-food-input");
+  var pendingImageMeal = null;
+
+  document.querySelectorAll(".btn-image-food").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      pendingImageMeal = btn.getAttribute("data-meal");
+      if (imageInput) {
+        imageInput.value = "";
+        imageInput.click();
+      }
+    });
+  });
+
+  if (imageInput) {
+    imageInput.addEventListener("change", function () {
+      if (!imageInput.files || !imageInput.files[0] || !pendingImageMeal) return;
+      var file = imageInput.files[0];
+      var meal = pendingImageMeal;
+      pendingImageMeal = null;
+
+      if (file.size > 20 * 1024 * 1024) {
+        alert("Image is too large. Please use an image under 20 MB.");
+        return;
+      }
+
+      var reader = new FileReader();
+      reader.onload = function () {
+        resizeImageIfNeeded(reader.result, 1024, function (resized) {
+          sendImageForAnalysis(meal, resized);
+        });
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function sendImageForAnalysis(meal, base64Image) {
+    var btn = document.querySelector('.btn-image-food[data-meal="' + meal + '"]');
+    if (btn) { btn.disabled = true; btn.textContent = "Analyzing..."; }
+
+    fetch(getAnalyzeImageApiUrl(), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ image: base64Image }),
+    })
+      .then(function (r) {
+        if (!r.ok) return r.json().then(function (d) { throw new Error(d.error || r.statusText); });
+        return r.json();
+      })
+      .then(function (data) {
+        var items = data.items || [];
+        if (items.length === 0) {
+          alert("No foods were identified in the image.");
+          return Promise.resolve();
+        }
+        return loadFoodDatabase().then(function () {
+          var mealData = getMealEntriesForDate(selectedDate);
+          var matched = [];
+          var unmatched = [];
+          return processAiItems(meal, items, mealData, matched, unmatched);
+        });
+      })
+      .catch(function (err) {
+        alert("Could not analyze image: " + (err.message || err));
+      })
+      .then(function () {
+        if (btn) { btn.disabled = false; btn.textContent = "Photo"; }
+      });
+  }
+
+  // --- Barcode scanning ---
+
+  var barcodeModal = document.getElementById("barcode-modal");
+  var barcodeReaderEl = document.getElementById("barcode-reader");
+  var barcodeStatus = document.getElementById("barcode-status");
+  var barcodeCancel = document.getElementById("barcode-cancel");
+  var html5QrCode = null;
+  var barcodeMeal = null;
+
+  // Show barcode scan buttons only if camera is available
+  function checkCameraAvailability() {
+    if (typeof Html5Qrcode === "undefined") return;
+    if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
+      navigator.mediaDevices.enumerateDevices().then(function (devices) {
+        var hasCamera = devices.some(function (d) { return d.kind === "videoinput"; });
+        if (hasCamera) {
+          document.querySelectorAll(".btn-barcode-scan").forEach(function (btn) {
+            btn.hidden = false;
+          });
+        }
+      }).catch(function () {});
+    }
+  }
+  checkCameraAvailability();
+
+  document.querySelectorAll(".btn-barcode-scan").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      barcodeMeal = btn.getAttribute("data-meal");
+      openBarcodeScanner();
+    });
+  });
+
+  function openBarcodeScanner() {
+    if (!barcodeModal || !barcodeReaderEl || typeof Html5Qrcode === "undefined") return;
+    barcodeModal.hidden = false;
+    if (barcodeStatus) barcodeStatus.textContent = "Point your camera at a barcode...";
+
+    html5QrCode = new Html5Qrcode("barcode-reader");
+    html5QrCode.start(
+      { facingMode: "environment" },
+      {
+        fps: 10,
+        qrbox: { width: 250, height: 150 },
+        aspectRatio: 1.5
+      },
+      onBarcodeScanSuccess,
+      function () {} // ignore scan failures (noise)
+    ).catch(function (err) {
+      if (barcodeStatus) barcodeStatus.textContent = "Camera access denied or not available.";
+    });
+  }
+
+  function closeBarcodeScanner() {
+    if (html5QrCode) {
+      html5QrCode.stop().then(function () {
+        html5QrCode.clear();
+      }).catch(function () {});
+      html5QrCode = null;
+    }
+    if (barcodeModal) barcodeModal.hidden = true;
+    barcodeMeal = null;
+  }
+
+  if (barcodeCancel) barcodeCancel.addEventListener("click", closeBarcodeScanner);
+  if (barcodeModal) {
+    barcodeModal.addEventListener("click", function (e) {
+      if (e.target === barcodeModal) closeBarcodeScanner();
+    });
+  }
+
+  function onBarcodeScanSuccess(decodedText) {
+    // Stop scanning immediately to prevent duplicate scans
+    if (html5QrCode) {
+      html5QrCode.stop().catch(function () {});
+    }
+    if (barcodeStatus) barcodeStatus.textContent = "Barcode: " + decodedText + ". Looking up product...";
+
+    var barcode = decodedText.trim();
+    var meal = barcodeMeal;
+
+    // Look up on Open Food Facts (free, no API key needed)
+    fetch("https://world.openfoodfacts.org/api/v0/product/" + encodeURIComponent(barcode) + ".json")
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (!data || data.status !== 1 || !data.product) {
+          if (barcodeStatus) barcodeStatus.textContent = "Product not found in Open Food Facts database.";
+          setTimeout(closeBarcodeScanner, 2500);
+          return;
+        }
+
+        var product = data.product;
+        var productName = product.product_name || product.product_name_en || "Unknown product";
+        if (barcodeStatus) barcodeStatus.textContent = "Found: " + productName + ". Matching to nickel database...";
+
+        return loadFoodDatabase().then(function () {
+          var result = findMatchesWithConfidence(productName);
+
+          if (result.confidence >= DISAMBIGUATION_THRESHOLD && result.best) {
+            addFoodToMeal(meal, result.best);
+            closeBarcodeScanner();
+            return;
+          }
+
+          if (result.matches.length > 0) {
+            closeBarcodeScanner();
+            return showDisambiguationModal(productName, result.matches).then(function (selected) {
+              if (selected) addFoodToMeal(meal, selected);
+            });
+          }
+
+          // Try AI pick-food as fallback — pass food objects (callPickFoodApi expects objects with name_en)
+          var allFoods = getFoods();
+          if (allFoods.length > 0) {
+            var candidateFoods = allFoods.slice(0, 25);
+            return callPickFoodApi(productName, candidateFoods).then(function (chosen) {
+              if (chosen) { addFoodToMeal(meal, chosen); closeBarcodeScanner(); return; }
+              if (barcodeStatus) barcodeStatus.textContent = "\"" + productName + "\" not found in nickel database.";
+              setTimeout(closeBarcodeScanner, 3000);
+            }).catch(function () {
+              if (barcodeStatus) barcodeStatus.textContent = "\"" + productName + "\" not found in nickel database.";
+              setTimeout(closeBarcodeScanner, 3000);
+            });
+          }
+
+          if (barcodeStatus) barcodeStatus.textContent = "\"" + productName + "\" not found in nickel database.";
+          setTimeout(closeBarcodeScanner, 3000);
+        });
+      })
+      .catch(function (err) {
+        if (barcodeStatus) barcodeStatus.textContent = "Lookup failed: " + (err.message || err);
+        setTimeout(closeBarcodeScanner, 3000);
+      });
+  }
+
   // --- Recipes: full CRUD ---
   function getStoredRecipes() { return DataStore.getStoredRecipes(); }
   function setStoredRecipes(recipes) { DataStore.setStoredRecipes(recipes); }
@@ -1125,19 +1478,56 @@
       var nameSpan = document.createElement("span");
       nameSpan.className = "recipe-ing-name";
       nameSpan.textContent = ing.name_en || ing.foodId;
-      var servingsSelect = document.createElement("select");
-      servingsSelect.className = "meal-servings-select";
-      SERVING_OPTIONS.forEach(function (s) {
-        var opt = document.createElement("option");
-        opt.value = s; opt.textContent = s;
-        if (ing.servings === s) opt.selected = true;
-        servingsSelect.appendChild(opt);
-      });
-      servingsSelect.addEventListener("change", function () {
-        recipeModalIngredients[idx].servings = parseFloat(servingsSelect.value);
+
+      // Quantity controls: amount input + unit select
+      var displayUnit = ing.display_unit || "serving";
+      var displayAmount = ing.display_amount != null ? ing.display_amount : (ing.servings || 1);
+      var servingSizeG = ing.serving_size_g || 100;
+
+      var qtyWrap = document.createElement("div");
+      qtyWrap.className = "meal-entry-quantity";
+
+      var amountInput = document.createElement("input");
+      amountInput.type = "number";
+      amountInput.className = "quantity-amount-input";
+      amountInput.value = displayAmount;
+      amountInput.min = "0.01";
+      amountInput.step = "0.25";
+
+      var unitSelect = document.createElement("select");
+      unitSelect.className = "quantity-unit-select";
+      unitSelect.innerHTML = buildUnitOptions(servingSizeG, displayUnit);
+
+      amountInput.addEventListener("change", function () {
+        var amount = parseFloat(amountInput.value) || 0;
+        if (amount < 0.01) { amount = 0.01; amountInput.value = amount; }
+        var unit = unitSelect.value;
+        recipeModalIngredients[idx].servings = computeServingsMultiplier(amount, unit, servingSizeG);
+        recipeModalIngredients[idx].display_unit = unit;
+        recipeModalIngredients[idx].display_amount = amount;
         renderRecipeIngredients();
         updateRecipeNickelSummary();
       });
+
+      unitSelect.addEventListener("change", function () {
+        var oldAmount = parseFloat(amountInput.value) || 1;
+        var oldUnit = ing.display_unit || "serving";
+        var newUnit = unitSelect.value;
+        var oldGrams = oldUnit === "serving" ? oldAmount * servingSizeG : oldAmount * (UNIT_TO_GRAMS[oldUnit] || 1);
+        var newAmount = newUnit === "serving" ? oldGrams / servingSizeG : oldGrams / (UNIT_TO_GRAMS[newUnit] || 1);
+        newAmount = Math.round(newAmount * 100) / 100;
+        if (newAmount < 0.01) newAmount = 0.01;
+        amountInput.value = newAmount;
+        recipeModalIngredients[idx].servings = computeServingsMultiplier(newAmount, newUnit, servingSizeG);
+        recipeModalIngredients[idx].display_unit = newUnit;
+        recipeModalIngredients[idx].display_amount = newAmount;
+        renderRecipeIngredients();
+        updateRecipeNickelSummary();
+      });
+
+      qtyWrap.appendChild(amountInput);
+      qtyWrap.appendChild(unitSelect);
+
       var nickelSpan = document.createElement("span");
       nickelSpan.className = "recipe-ing-nickel";
       nickelSpan.textContent = ingNi + " \u00b5g";
@@ -1150,7 +1540,7 @@
         updateRecipeNickelSummary();
       });
       li.appendChild(nameSpan);
-      li.appendChild(servingsSelect);
+      li.appendChild(qtyWrap);
       li.appendChild(nickelSpan);
       li.appendChild(removeBtn);
       list.appendChild(li);

@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="css/style.css" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 </head>
 <body>
   <header class="site-header">
@@ -77,7 +78,11 @@
           <div class="meal-describe">
             <label for="meal-desc-breakfast" class="visually-hidden">Describe this meal for AI suggestions</label>
             <textarea id="meal-desc-breakfast" class="input meal-desc-input" data-meal="breakfast" placeholder="e.g. two eggs, whole wheat toast, orange juice" rows="3"></textarea>
-            <button type="button" class="btn btn-secondary btn-suggest-foods" data-meal="breakfast">Analyze with AI</button>
+            <div class="meal-ai-actions">
+              <button type="button" class="btn btn-secondary btn-suggest-foods" data-meal="breakfast">Analyze with AI</button>
+              <button type="button" class="btn btn-secondary btn-image-food" data-meal="breakfast" title="Identify food from photo">Photo</button>
+              <button type="button" class="btn btn-secondary btn-barcode-scan" data-meal="breakfast" title="Scan barcode" hidden>Scan</button>
+            </div>
           </div>
           <ul class="meal-entries" data-meal="breakfast"><li class="empty-hint">No entries yet.</li></ul>
           <button type="button" class="btn btn-secondary add-entry" data-meal="breakfast">+ Add entry</button>
@@ -91,7 +96,11 @@
           <div class="meal-describe">
             <label for="meal-desc-lunch" class="visually-hidden">Describe this meal for AI suggestions</label>
             <textarea id="meal-desc-lunch" class="input meal-desc-input" data-meal="lunch" placeholder="e.g. two eggs, whole wheat toast, orange juice" rows="3"></textarea>
-            <button type="button" class="btn btn-secondary btn-suggest-foods" data-meal="lunch">Analyze with AI</button>
+            <div class="meal-ai-actions">
+              <button type="button" class="btn btn-secondary btn-suggest-foods" data-meal="lunch">Analyze with AI</button>
+              <button type="button" class="btn btn-secondary btn-image-food" data-meal="lunch" title="Identify food from photo">Photo</button>
+              <button type="button" class="btn btn-secondary btn-barcode-scan" data-meal="lunch" title="Scan barcode" hidden>Scan</button>
+            </div>
           </div>
           <ul class="meal-entries" data-meal="lunch"><li class="empty-hint">No entries yet.</li></ul>
           <button type="button" class="btn btn-secondary add-entry" data-meal="lunch">+ Add entry</button>
@@ -105,7 +114,11 @@
           <div class="meal-describe">
             <label for="meal-desc-dinner" class="visually-hidden">Describe this meal for AI suggestions</label>
             <textarea id="meal-desc-dinner" class="input meal-desc-input" data-meal="dinner" placeholder="e.g. two eggs, whole wheat toast, orange juice" rows="3"></textarea>
-            <button type="button" class="btn btn-secondary btn-suggest-foods" data-meal="dinner">Analyze with AI</button>
+            <div class="meal-ai-actions">
+              <button type="button" class="btn btn-secondary btn-suggest-foods" data-meal="dinner">Analyze with AI</button>
+              <button type="button" class="btn btn-secondary btn-image-food" data-meal="dinner" title="Identify food from photo">Photo</button>
+              <button type="button" class="btn btn-secondary btn-barcode-scan" data-meal="dinner" title="Scan barcode" hidden>Scan</button>
+            </div>
           </div>
           <ul class="meal-entries" data-meal="dinner"><li class="empty-hint">No entries yet.</li></ul>
           <button type="button" class="btn btn-secondary add-entry" data-meal="dinner">+ Add entry</button>
@@ -119,7 +132,11 @@
           <div class="meal-describe">
             <label for="meal-desc-snacks" class="visually-hidden">Describe this meal for AI suggestions</label>
             <textarea id="meal-desc-snacks" class="input meal-desc-input" data-meal="snacks" placeholder="e.g. two eggs, whole wheat toast, orange juice" rows="3"></textarea>
-            <button type="button" class="btn btn-secondary btn-suggest-foods" data-meal="snacks">Analyze with AI</button>
+            <div class="meal-ai-actions">
+              <button type="button" class="btn btn-secondary btn-suggest-foods" data-meal="snacks">Analyze with AI</button>
+              <button type="button" class="btn btn-secondary btn-image-food" data-meal="snacks" title="Identify food from photo">Photo</button>
+              <button type="button" class="btn btn-secondary btn-barcode-scan" data-meal="snacks" title="Scan barcode" hidden>Scan</button>
+            </div>
           </div>
           <ul class="meal-entries" data-meal="snacks"><li class="empty-hint">No entries yet.</li></ul>
           <button type="button" class="btn btn-secondary add-entry" data-meal="snacks">+ Add entry</button>
@@ -129,6 +146,8 @@
           </div>
         </article>
       </div>
+      <!-- Hidden file input for image capture / upload (shared across all meals) -->
+      <input type="file" id="image-food-input" accept="image/*" capture="environment" hidden />
     </section>
 
     <!-- Food database (searchable) -->
@@ -296,6 +315,16 @@
           Don't have an account? <a href="#" id="auth-toggle-link">Sign up</a>
         </p>
         <button type="button" class="btn btn-secondary modal-cancel" id="auth-modal-cancel">Cancel</button>
+      </div>
+    </div>
+
+    <!-- Barcode Scanner Modal -->
+    <div class="modal-overlay" id="barcode-modal" hidden aria-modal="true" aria-labelledby="barcode-title">
+      <div class="modal card barcode-modal-card">
+        <h3 id="barcode-title" class="modal-title">Scan Barcode</h3>
+        <div id="barcode-reader" class="barcode-reader"></div>
+        <p class="barcode-status" id="barcode-status">Point your camera at a barcode...</p>
+        <button type="button" class="btn btn-secondary" id="barcode-cancel">Cancel</button>
       </div>
     </div>
 

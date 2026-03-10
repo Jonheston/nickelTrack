@@ -337,10 +337,29 @@ body {
   width: 100%;
 }
 
-.meal-describe .btn-suggest-foods {
-  display: block;
-  width: 100%;
+.meal-ai-actions {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  margin-top: var(--space-xs);
+}
+
+.meal-ai-actions .btn {
+  flex: 1 1 auto;
   margin-top: 0;
+}
+
+.meal-ai-actions .btn-suggest-foods {
+  flex: 2 1 auto;
+}
+
+@media (max-width: 480px) {
+  .meal-ai-actions {
+    flex-direction: column;
+  }
+  .meal-ai-actions .btn {
+    width: 100%;
+  }
 }
 
 /* Disambiguation modal */
@@ -502,23 +521,40 @@ body {
   margin-top: 0.15rem;
 }
 
-.meal-entry-servings {
+.meal-entry-quantity {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
 }
 
-.meal-entry-servings label {
-  font-size: 0.85rem;
-  color: var(--color-text-muted);
-}
-
-.meal-entry-servings select {
-  padding: 0.2em 0.5em;
+.quantity-amount-input {
+  width: 4.5rem;
+  padding: 0.2em 0.4em;
   font-size: 0.9rem;
   border: 1px solid var(--color-border);
   border-radius: 4px;
   background: var(--color-surface);
+  text-align: right;
+  font-family: var(--font);
+}
+
+.quantity-unit-select {
+  padding: 0.2em 0.4em;
+  font-size: 0.85rem;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background: var(--color-surface);
+  font-family: var(--font);
+}
+
+/* Hide number input spin buttons for cleaner look */
+.quantity-amount-input::-webkit-inner-spin-button,
+.quantity-amount-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.quantity-amount-input[type="number"] {
+  -moz-appearance: textfield;
 }
 
 .meal-entry-actions {
@@ -1199,4 +1235,24 @@ body {
   font-size: 0.85rem;
   color: var(--color-text-muted);
   flex-shrink: 0;
+}
+
+/* Barcode scanner modal */
+.barcode-modal-card {
+  max-width: 400px;
+}
+
+.barcode-reader {
+  width: 100%;
+  min-height: 250px;
+  background: #000;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.barcode-status {
+  margin: var(--space-sm) 0 0;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  text-align: center;
 }
