@@ -591,6 +591,88 @@ def build_foods(
   return foods
 
 
+def normalize_name(name: str) -> str:
+  """Normalize food name for dedup comparison."""
+  n = name.lower().strip()
+  n = re.sub(r"\s*\(.*?\)\s*", " ", n)  # remove parentheticals
+  n = n.strip(", ")
+  n = re.sub(r"\s+", " ", n)
+  return n
+
+
+def name_similarity(a: str, b: str) -> float:
+  """Jaccard token-overlap similarity between two food names."""
+  a_tokens = set(normalize_name(a).split())
+  b_tokens = set(normalize_name(b).split())
+  if not a_tokens or not b_tokens:
+    return 0.0
+  intersection = a_tokens & b_tokens
+  union = a_tokens | b_tokens
+  return len(intersection) / len(union)
+
+
+SOURCE_PRIORITY = {"lowNiDiet": 0, "FDA_TDS_2018_2020": 1, "BfR_MEAL": 2}
+
+
+def deduplicate_foods(foods: List[Food], threshold: float = 0.7) -> List[Food]:
+  """Merge foods that represent the same item across sources."""
+  groups: Dict[str, List[Food]] = defaultdict(list)
+  group_keys: List[str] = []
+
+  for food in foods:
+    key = normalize_name(food.name_en)
+    matched_key = None
+    for existing_key in group_keys:
+      if name_similarity(key, existing_key) >= threshold:
+        matched_key = existing_key
+        break
+    if matched_key:
+      groups[matched_key].append(food)
+    else:
+      groups[key].append(food)
+      group_keys.append(key)
+
+  merged: List[Food] = []
+  for key in group_keys:
+    group = groups[key]
+    if len(group) == 1:
+      merged.append(group[0])
+      continue
+
+    # Sort by source priority: lowNiDiet first
+    group.sort(key=lambda f: min(
+      (SOURCE_PRIORITY.get(s.source_id, 99) for s in f.sources),
+      default=99
+    ))
+
+    primary = group[0]
+    all_sources: List[SourceEntry] = []
+    for food in group:
+      all_sources.extend(food.sources)
+
+    vals_100g = [f.nickel_ug_per_100g for f in group if f.nickel_ug_per_100g is not None]
+    avg_100g = sum(vals_100g) / len(vals_100g) if vals_100g else primary.nickel_ug_per_100g
+
+    alt_names = [f.name_en for f in group[1:] if f.name_en != primary.name_en]
+    notes = [f"merged_from:{len(group)}_sources"]
+    notes.extend(f"alt_name::{n}" for n in alt_names)
+
+    merged.append(Food(
+      id=primary.id,
+      name_en=primary.name_en,
+      category=primary.category,
+      sub_category=primary.sub_category,
+      nickel_ug_per_serving=primary.nickel_ug_per_serving,
+      serving_size_g=primary.serving_size_g,
+      nickel_ug_per_100g=avg_100g,
+      nickel_band=None,
+      sources=all_sources,
+      notes=notes,
+    ))
+
+  return merged
+
+
 def compute_bands(foods: Iterable[Food]) -> Dict[str, Any]:
   values: List[float] = [
     f.nickel_ug_per_100g for f in foods if f.nickel_ug_per_100g is not None and f.nickel_ug_per_100g >= 0
@@ -686,6 +768,9 @@ def main() -> None:
     print("BfR MEAL Excel not found; skipping BfR integration.")
 
   foods = build_foods(low_entries, fda_entries, bfr_entries)
+  print(f"  Before deduplication: {len(foods)} foods")
+  foods = deduplicate_foods(foods, threshold=0.7)
+  print(f"  After deduplication: {len(foods)} foods")
   bands_conf = compute_bands(foods)
   assign_bands(foods, bands_conf)
 

@@ -25,10 +25,27 @@
     const q = (query || "").trim().toLowerCase();
     const foods = getFoods();
     if (!q) return foods.slice(0, 100);
+    var nameMatches = [];
+    var categoryOnlyMatches = [];
+    foods.forEach(function (f) {
+      var name = (f.name_en || "").toLowerCase();
+      var cat = (f.category || "").toLowerCase();
+      if (name.indexOf(q) !== -1) {
+        nameMatches.push(f);
+      } else if (cat.indexOf(q) !== -1) {
+        categoryOnlyMatches.push(f);
+      }
+    });
+    return nameMatches.concat(categoryOnlyMatches);
+  }
+
+  /** Search by food name only (no category matching). Used for AI matching. */
+  function searchFoodsByName(query) {
+    var q = (query || "").trim().toLowerCase();
+    var foods = getFoods();
+    if (!q) return [];
     return foods.filter(function (f) {
-      const name = (f.name_en || "").toLowerCase();
-      const cat = (f.category || "").toLowerCase();
-      return name.indexOf(q) !== -1 || cat.indexOf(q) !== -1;
+      return (f.name_en || "").toLowerCase().indexOf(q) !== -1;
     });
   }
 
@@ -68,16 +85,32 @@
   function findMatchesWithConfidence(itemName) {
     var name = (itemName || "").trim();
     if (!name) return { matches: [], confidence: 0, best: null };
-    var foods = searchFoods(name);
+
+    // Use name-only search so category matches don't pollute AI scoring
+    var foods = searchFoodsByName(name);
     if (foods.length === 0) {
       var withoutNumbers = name.replace(/\b\d+\s*/g, "").trim();
-      if (withoutNumbers && withoutNumbers !== name) foods = searchFoods(withoutNumbers);
+      if (withoutNumbers && withoutNumbers !== name) foods = searchFoodsByName(withoutNumbers);
     }
     if (foods.length === 0) {
       var firstWord = name.split(/\s+/)[0];
-      if (firstWord && firstWord.length >= 2) foods = searchFoods(firstWord);
+      if (firstWord && firstWord.length >= 2) foods = searchFoodsByName(firstWord);
     }
     if (foods.length === 0) return { matches: [], confidence: 0, best: null };
+
+    // Filter to whole-word matches to avoid "egg" matching "eggplant"
+    var wholeWordMatches = foods.filter(function (f) {
+      var fn = f.name_en || f.id;
+      return wordRelevantToName(name, fn) ||
+             wordRelevantToName(name.split(/\s+/)[0], fn);
+    });
+    if (wholeWordMatches.length > 0) foods = wholeWordMatches;
+
+    // Sort by similarity so the best match is first
+    foods.sort(function (a, b) {
+      return nameSimilarity(name, b.name_en || b.id) - nameSimilarity(name, a.name_en || a.id);
+    });
+
     var best = foods[0];
     var similarity = nameSimilarity(name, best.name_en || best.id);
     var numPenalty = 1 / (1 + 0.2 * (foods.length - 1));
@@ -259,8 +292,21 @@
   const SERVING_OPTIONS = [0.5, 1, 1.5, 2, 2.5, 3];
 
   function getTodayDate() {
-    return new Date().toISOString().slice(0, 10);
+    var d = new Date();
+    var y = d.getFullYear();
+    var m = (d.getMonth() + 1);
+    var day = d.getDate();
+    return y + "-" + (m < 10 ? "0" : "") + m + "-" + (day < 10 ? "0" : "") + day;
   }
+
+  function formatLocalDate(d) {
+    var y = d.getFullYear();
+    var m = d.getMonth() + 1;
+    var day = d.getDate();
+    return y + "-" + (m < 10 ? "0" : "") + m + "-" + (day < 10 ? "0" : "") + day;
+  }
+
+  var selectedDate = getTodayDate();
 
   function getStoredEntries() {
     try {
@@ -277,17 +323,122 @@
     } catch (_) {}
   }
 
-  function getTodayMealEntries() {
+  function getMealEntriesForDate(date) {
     const all = getStoredEntries();
-    const today = getTodayDate();
-    if (!all[today]) all[today] = { breakfast: [], lunch: [], dinner: [], snacks: [] };
-    return all[today];
+    const d = date || getTodayDate();
+    if (!all[d]) all[d] = { breakfast: [], lunch: [], dinner: [], snacks: [] };
+    return all[d];
   }
 
-  function saveTodayMealEntries(mealData) {
+  function saveMealEntriesForDate(date, mealData) {
     const all = getStoredEntries();
-    all[getTodayDate()] = mealData;
+    all[date || getTodayDate()] = mealData;
     setStoredEntries(all);
+  }
+
+  function getTotalNickelForDate(date) {
+    var mealData = getMealEntriesForDate(date);
+    var total = 0;
+    ["breakfast", "lunch", "dinner", "snacks"].forEach(function (meal) {
+      var arr = mealData[meal] || [];
+      arr.forEach(function (entry) {
+        total += (entry.nickelUgPerServing || 0) * (entry.servings || 1);
+      });
+    });
+    return Math.round(total * 10) / 10;
+  }
+
+  function setSelectedDate(dateStr) {
+    selectedDate = dateStr || getTodayDate();
+    loadAndRenderAllMeals();
+    renderCalendar();
+    updateDateNavLabel();
+  }
+
+  function hasDataForDate(date) {
+    var mealData = getMealEntriesForDate(date);
+    return (mealData.breakfast && mealData.breakfast.length > 0) ||
+      (mealData.lunch && mealData.lunch.length > 0) ||
+      (mealData.dinner && mealData.dinner.length > 0) ||
+      (mealData.snacks && mealData.snacks.length > 0);
+  }
+
+  function getDayColorClass(dateStr) {
+    if (!hasDataForDate(dateStr)) return "cal-no-data";
+    var total = getTotalNickelForDate(dateStr);
+    var goal = getStoredGoal();
+    if (total <= goal) return "cal-under";
+    if (total <= goal * 1.25) return "cal-over";
+    return "cal-way-over";
+  }
+
+  function goPrevMonth() {
+    var d = new Date(selectedDate + "T12:00:00");
+    d.setMonth(d.getMonth() - 1);
+    setSelectedDate(formatLocalDate(d));
+  }
+
+  function goNextMonth() {
+    var d = new Date(selectedDate + "T12:00:00");
+    d.setMonth(d.getMonth() + 1);
+    setSelectedDate(formatLocalDate(d));
+  }
+
+  function renderCalendar() {
+    var wrap = document.getElementById("calendar-wrap");
+    if (!wrap) return;
+    var parts = selectedDate.split("-");
+    var year = parseInt(parts[0], 10);
+    var month = parseInt(parts[1], 10) - 1;
+    var first = new Date(year, month, 1);
+    var last = new Date(year, month + 1, 0);
+    var startPad = first.getDay();
+    var daysInMonth = last.getDate();
+    var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    var todayStr = getTodayDate();
+    var html = "<div class=\"cal-month-nav\">";
+    html += "<button type=\"button\" class=\"btn btn-secondary cal-month-btn\" id=\"cal-prev-month\" aria-label=\"Previous month\">←</button>";
+    html += "<span class=\"cal-month-title\">" + monthNames[month] + " " + year + "</span>";
+    html += "<button type=\"button\" class=\"btn btn-secondary cal-month-btn\" id=\"cal-next-month\" aria-label=\"Next month\">→</button>";
+    html += "</div>";
+    html += "<div class=\"cal-grid\"><span class=\"cal-dow\">Sun</span><span class=\"cal-dow\">Mon</span><span class=\"cal-dow\">Tue</span><span class=\"cal-dow\">Wed</span><span class=\"cal-dow\">Thu</span><span class=\"cal-dow\">Fri</span><span class=\"cal-dow\">Sat</span>";
+    for (var i = 0; i < startPad; i++) html += "<span class=\"cal-day cal-empty\"></span>";
+    for (var d = 1; d <= daysInMonth; d++) {
+      var dateStr = year + "-" + (month + 1 < 10 ? "0" : "") + (month + 1) + "-" + (d < 10 ? "0" : "") + d;
+      var isFuture = dateStr > todayStr;
+      if (isFuture) {
+        html += "<span class=\"cal-day cal-future\">" + d + "</span>";
+      } else {
+        var colorClass = getDayColorClass(dateStr);
+        var isSelected = dateStr === selectedDate ? " cal-selected" : "";
+        html += "<button type=\"button\" class=\"cal-day " + colorClass + isSelected + "\" data-date=\"" + dateStr + "\">" + d + "</button>";
+      }
+    }
+    html += "</div>";
+    wrap.innerHTML = html;
+    wrap.querySelectorAll(".cal-day[data-date]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        setSelectedDate(btn.getAttribute("data-date"));
+      });
+    });
+    var prevBtn = document.getElementById("cal-prev-month");
+    var nextBtn = document.getElementById("cal-next-month");
+    if (prevBtn) prevBtn.addEventListener("click", goPrevMonth);
+    if (nextBtn) nextBtn.addEventListener("click", goNextMonth);
+  }
+
+  function updateDateNavLabel() {
+    var heading = document.getElementById("daily-summary-heading");
+    var input = document.getElementById("meal-date-input");
+    if (input) input.value = selectedDate;
+    if (heading) {
+      if (selectedDate === getTodayDate()) {
+        heading.textContent = "Today's nickel";
+      } else {
+        var d = new Date(selectedDate + "T12:00:00");
+        heading.textContent = d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) + "'s nickel";
+      }
+    }
   }
 
   function buildEntryFromFood(food) {
@@ -360,24 +511,25 @@
     list.querySelectorAll(".btn-remove-entry").forEach(function (btn) {
       btn.addEventListener("click", function () {
         const idx = parseInt(btn.getAttribute("data-index"), 10);
-        const mealData = getTodayMealEntries();
+        const mealData = getMealEntriesForDate(selectedDate);
         const arr = mealData[meal] || [];
         arr.splice(idx, 1);
         mealData[meal] = arr;
-        saveTodayMealEntries(mealData);
+        saveMealEntriesForDate(selectedDate, mealData);
         renderMealList(meal, arr);
         recomputeDailyTotal();
+        renderCalendar();
       });
     });
     list.querySelectorAll(".meal-servings-select").forEach(function (select) {
       select.addEventListener("change", function () {
         const idx = parseInt(select.getAttribute("data-index"), 10);
         const newServings = parseFloat(select.value, 10);
-        const mealData = getTodayMealEntries();
+        const mealData = getMealEntriesForDate(selectedDate);
         const arr = mealData[meal] || [];
         if (arr[idx]) {
           arr[idx].servings = newServings;
-          saveTodayMealEntries(mealData);
+          saveMealEntriesForDate(selectedDate, mealData);
           var li = list.querySelector("li[data-entry-index=\"" + idx + "\"]");
           if (li) {
             var total = Math.round(arr[idx].nickelUgPerServing * newServings * 10) / 10;
@@ -387,13 +539,14 @@
             if (meta) meta.textContent = total + " µg";
           }
           recomputeDailyTotal();
+          renderCalendar();
         }
       });
     });
   }
 
   function loadAndRenderAllMeals() {
-    var mealData = getTodayMealEntries();
+    var mealData = getMealEntriesForDate(selectedDate);
     ["breakfast", "lunch", "dinner", "snacks"].forEach(function (meal) {
       renderMealList(meal, mealData[meal] || []);
     });
@@ -429,13 +582,14 @@
       showAddButton: true,
       onAddClick: function (food) {
         if (!currentAddMeal) return;
-        const mealData = getTodayMealEntries();
+        const mealData = getMealEntriesForDate(selectedDate);
         const arr = mealData[currentAddMeal] || [];
         arr.push(buildEntryFromFood(food));
         mealData[currentAddMeal] = arr;
-        saveTodayMealEntries(mealData);
+        saveMealEntriesForDate(selectedDate, mealData);
         renderMealList(currentAddMeal, arr);
         recomputeDailyTotal();
+        renderCalendar();
         closeAddToMealModal();
       },
     });
@@ -461,6 +615,15 @@
     });
     history.replaceState(null, "", "#" + sectionId);
     if (sectionId === "food-database") onShowFoodDatabase();
+    if (sectionId === "recipes") { loadFoodDatabase().then(renderRecipes).catch(function () {}); }
+    if (sectionId === "meal-planner") {
+      if (!currentPlanWeek) {
+        currentPlanWeek = getCurrentWeekStr();
+        var plannerWeekInput = document.getElementById("planner-week");
+        if (plannerWeekInput) plannerWeekInput.value = currentPlanWeek;
+      }
+      loadFoodDatabase().then(function () { renderPlannerGrid(); }).catch(function () {});
+    }
   };
 
   if (getSectionFromHash() === "food-database") onShowFoodDatabase();
@@ -532,6 +695,31 @@
   renderGoal();
 
   loadAndRenderAllMeals();
+  updateDateNavLabel();
+  renderCalendar();
+
+  var mealDateInput = document.getElementById("meal-date-input");
+  var datePrev = document.getElementById("date-prev");
+  var dateNext = document.getElementById("date-next");
+  if (mealDateInput) {
+    mealDateInput.addEventListener("change", function () {
+      if (mealDateInput.value) setSelectedDate(mealDateInput.value);
+    });
+  }
+  if (datePrev) {
+    datePrev.addEventListener("click", function () {
+      var d = new Date(selectedDate + "T12:00:00");
+      d.setDate(d.getDate() - 1);
+      setSelectedDate(formatLocalDate(d));
+    });
+  }
+  if (dateNext) {
+    dateNext.addEventListener("click", function () {
+      var d = new Date(selectedDate + "T12:00:00");
+      d.setDate(d.getDate() + 1);
+      setSelectedDate(formatLocalDate(d));
+    });
+  }
 
   // --- Add entry: open food database modal ---
   document.querySelectorAll(".add-entry").forEach(function (btn) {
@@ -598,8 +786,8 @@
     cheese: ["cheese", "dairy"],
     milk: ["milk", "dairy"],
     butter: ["butter", "dairy"],
-    egg: ["egg", "eggs"],
-    eggs: ["egg", "eggs"],
+    egg: ["egg", "eggs", "hen egg"],
+    eggs: ["egg", "eggs", "hen egg", "omelette"],
     oj: ["orange", "juice"],
     "orange juice": ["orange", "juice"],
     coffee: ["coffee", "beverage"],
@@ -611,6 +799,36 @@
     bread: ["bread", "roll"],
     yogurt: ["yogurt", "yoghurt"],
     cereal: ["cereal", "grain"],
+    "scrambled eggs": ["egg", "omelette", "scrambled"],
+    omelette: ["egg", "omelette", "scrambled"],
+    omelet: ["egg", "omelette", "scrambled"],
+    "fried egg": ["egg", "hen egg", "pan-fried"],
+    "boiled egg": ["egg", "eggs", "hard-boiled"],
+    "hard boiled egg": ["egg", "eggs", "hard-boiled"],
+    ham: ["ham", "pork", "meat"],
+    hamburger: ["beef", "ground", "meat"],
+    burger: ["beef", "ground", "patty"],
+    fries: ["potato", "fried"],
+    "french fries": ["potato", "fried"],
+    pizza: ["pizza", "bread", "cheese"],
+    sandwich: ["bread", "sandwich"],
+    soup: ["soup", "broth"],
+    apple: ["apple", "fruit"],
+    banana: ["banana", "fruit"],
+    orange: ["orange", "fruit", "citrus"],
+    tomato: ["tomato", "tomatoes"],
+    carrot: ["carrot", "carrots"],
+    broccoli: ["broccoli", "vegetable"],
+    spinach: ["spinach", "leafy"],
+    avocado: ["avocado", "fruit"],
+    shrimp: ["shrimp", "seafood"],
+    salmon: ["salmon", "fish"],
+    tuna: ["tuna", "fish"],
+    oatmeal: ["oat", "cereal", "porridge"],
+    pancake: ["pancake", "batter"],
+    waffle: ["waffle", "batter"],
+    noodles: ["noodle", "pasta"],
+    chocolate: ["chocolate", "cocoa"],
   };
 
   /** True if word appears as a whole word in name (avoids e.g. egg matching eggplant). */
@@ -734,35 +952,57 @@
         var arr = mealData[meal] || [];
         matched.forEach(function (f) { arr.push(buildEntryFromFood(f)); });
         mealData[meal] = arr;
-        saveTodayMealEntries(mealData);
+        saveMealEntriesForDate(selectedDate, mealData);
         renderMealList(meal, arr);
         recomputeDailyTotal();
         showUnmatched(meal, unmatched);
+        renderCalendar();
         return Promise.resolve();
       }
       var itemName = items[i++];
       var result = findMatchesWithConfidence(itemName);
-      if (result.matches.length === 0) {
-        var candidates = getCandidatesForNoMatch(itemName);
-        if (candidates.length === 0) {
-          unmatched.push(itemName);
-          return next();
-        }
-        return callPickFoodApi(itemName, candidates).then(function (chosen) {
-          if (chosen) matched.push(chosen);
-          else unmatched.push(itemName);
-          return next();
-        }).catch(function () {
-          unmatched.push(itemName);
-          return next();
-        });
-      }
+
+      // High confidence: auto-accept
       if (result.confidence >= DISAMBIGUATION_THRESHOLD) {
         matched.push(result.best);
         return next();
       }
-      return showDisambiguationModal(itemName, result.matches).then(function (selected) {
-        if (selected) matched.push(selected);
+
+      // Low confidence or zero matches: try AI pipeline
+      var candidates;
+      if (result.matches.length > 0) {
+        // We have name matches but low confidence — use them as AI candidates
+        candidates = result.matches.slice(0, 25);
+      } else {
+        candidates = getCandidatesForNoMatch(itemName);
+      }
+
+      if (candidates.length === 0) {
+        unmatched.push(itemName);
+        return next();
+      }
+
+      return callPickFoodApi(itemName, candidates).then(function (chosen) {
+        if (chosen) {
+          matched.push(chosen);
+        } else if (result.matches.length > 0) {
+          // AI couldn't pick; show disambiguation with name matches
+          return showDisambiguationModal(itemName, result.matches).then(function (selected) {
+            if (selected) matched.push(selected);
+            return next();
+          });
+        } else {
+          unmatched.push(itemName);
+        }
+        return next();
+      }).catch(function () {
+        if (result.matches.length > 0) {
+          return showDisambiguationModal(itemName, result.matches).then(function (selected) {
+            if (selected) matched.push(selected);
+            return next();
+          });
+        }
+        unmatched.push(itemName);
         return next();
       });
     }
@@ -796,7 +1036,7 @@
             return Promise.resolve();
           }
           return loadFoodDatabase().then(function () {
-            var mealData = getTodayMealEntries();
+            var mealData = getMealEntriesForDate(selectedDate);
             var matched = [];
             var unmatched = [];
             return processAiItems(meal, items, mealData, matched, unmatched);
@@ -815,34 +1055,558 @@
     });
   });
 
-  // --- Recipes: add recipe placeholder ---
-  const addRecipeBtn = document.getElementById("add-recipe-btn");
-  if (addRecipeBtn) {
-    addRecipeBtn.addEventListener("click", function () {
-      alert("Add recipe form coming soon. Recipes will include ingredients and nickel per serving (µg + low/medium/high).");
+  // --- Recipes: full CRUD ---
+  var RECIPES_KEY = "nickeltrack-recipes";
+
+  function getStoredRecipes() {
+    try { var raw = localStorage.getItem(RECIPES_KEY); return raw ? JSON.parse(raw) : []; }
+    catch (_) { return []; }
+  }
+  function setStoredRecipes(recipes) {
+    try { localStorage.setItem(RECIPES_KEY, JSON.stringify(recipes)); } catch (_) {}
+  }
+  function deleteRecipe(id) {
+    setStoredRecipes(getStoredRecipes().filter(function (r) { return r.id !== id; }));
+  }
+  function getRecipeNickelTotal(recipe) {
+    var total = 0;
+    (recipe.ingredients || []).forEach(function (ing) {
+      total += (ing.nickelUgPerServing || 0) * (ing.servings || 1);
+    });
+    return Math.round(total * 10) / 10;
+  }
+  function getRecipeNickelPerServing(recipe) {
+    return Math.round((getRecipeNickelTotal(recipe) / (recipe.totalServings || 1)) * 10) / 10;
+  }
+
+  var recipeModalIngredients = [];
+  var editingRecipeId = null;
+
+  function renderRecipes() {
+    var grid = document.getElementById("recipes-grid");
+    if (!grid) return;
+    var recipes = getStoredRecipes();
+    grid.innerHTML = "";
+    if (recipes.length === 0) {
+      var empty = document.createElement("div");
+      empty.className = "empty-state card";
+      empty.innerHTML = "<p>No recipes yet. Add your first recipe to see it here.</p>";
+      grid.appendChild(empty);
+      return;
+    }
+    recipes.forEach(function (recipe) {
+      var card = document.createElement("div");
+      card.className = "recipe-card card";
+      var nickelPerServing = getRecipeNickelPerServing(recipe);
+      var nickelTotal = getRecipeNickelTotal(recipe);
+      var count = (recipe.ingredients || []).length;
+
+      var header = document.createElement("div");
+      header.className = "recipe-card-header";
+      var title = document.createElement("h4");
+      title.className = "recipe-card-title";
+      title.textContent = recipe.name || "Untitled";
+      header.appendChild(title);
+      card.appendChild(header);
+
+      var meta = document.createElement("div");
+      meta.className = "recipe-card-meta";
+      meta.textContent = count + " ingredient(s) · " + recipe.totalServings + " serving(s) · " +
+        nickelPerServing + " \u00b5g Ni/serving · " + nickelTotal + " \u00b5g total";
+      card.appendChild(meta);
+
+      var ingList = document.createElement("ul");
+      ingList.className = "recipe-ingredient-summary";
+      (recipe.ingredients || []).forEach(function (ing) {
+        var li = document.createElement("li");
+        var ingNi = Math.round((ing.nickelUgPerServing || 0) * (ing.servings || 1) * 10) / 10;
+        li.textContent = (ing.servings || 1) + "x " + (ing.name_en || ing.foodId) + " (" + ingNi + " \u00b5g)";
+        ingList.appendChild(li);
+      });
+      card.appendChild(ingList);
+
+      var actions = document.createElement("div");
+      actions.className = "recipe-card-actions";
+      var editBtn = document.createElement("button");
+      editBtn.className = "btn btn-secondary";
+      editBtn.textContent = "Edit";
+      editBtn.addEventListener("click", function () { openRecipeModal(recipe); });
+      var delBtn = document.createElement("button");
+      delBtn.className = "btn btn-secondary";
+      delBtn.textContent = "Delete";
+      delBtn.addEventListener("click", function () {
+        if (confirm("Delete \"" + (recipe.name || "Untitled") + "\"?")) {
+          deleteRecipe(recipe.id);
+          renderRecipes();
+        }
+      });
+      actions.appendChild(editBtn);
+      actions.appendChild(delBtn);
+      card.appendChild(actions);
+      grid.appendChild(card);
     });
   }
 
-  // --- External resources: add resource placeholder ---
-  const addResourceBtn = document.getElementById("add-resource-btn");
+  function openRecipeModal(existing) {
+    var modal = document.getElementById("recipe-modal");
+    var nameInput = document.getElementById("recipe-name");
+    var servingsInput = document.getElementById("recipe-servings");
+    var titleEl = document.getElementById("recipe-modal-title");
+    if (!modal) return;
+    if (existing) {
+      editingRecipeId = existing.id;
+      if (titleEl) titleEl.textContent = "Edit Recipe";
+      if (nameInput) nameInput.value = existing.name || "";
+      if (servingsInput) servingsInput.value = existing.totalServings || 1;
+      recipeModalIngredients = (existing.ingredients || []).map(function (i) {
+        return Object.assign({}, i);
+      });
+    } else {
+      editingRecipeId = null;
+      if (titleEl) titleEl.textContent = "Add Recipe";
+      if (nameInput) nameInput.value = "";
+      if (servingsInput) servingsInput.value = 1;
+      recipeModalIngredients = [];
+    }
+    renderRecipeIngredients();
+    updateRecipeNickelSummary();
+    modal.hidden = false;
+    if (nameInput) nameInput.focus();
+  }
+
+  function renderRecipeIngredients() {
+    var list = document.getElementById("recipe-ingredients-list");
+    if (!list) return;
+    list.innerHTML = "";
+    if (recipeModalIngredients.length === 0) {
+      var hint = document.createElement("li");
+      hint.className = "empty-hint";
+      hint.textContent = "No ingredients yet.";
+      list.appendChild(hint);
+      return;
+    }
+    recipeModalIngredients.forEach(function (ing, idx) {
+      var li = document.createElement("li");
+      li.className = "recipe-ingredient-row";
+      var ingNi = Math.round((ing.nickelUgPerServing || 0) * (ing.servings || 1) * 10) / 10;
+      var nameSpan = document.createElement("span");
+      nameSpan.className = "recipe-ing-name";
+      nameSpan.textContent = ing.name_en || ing.foodId;
+      var servingsSelect = document.createElement("select");
+      servingsSelect.className = "meal-servings-select";
+      SERVING_OPTIONS.forEach(function (s) {
+        var opt = document.createElement("option");
+        opt.value = s; opt.textContent = s;
+        if (ing.servings === s) opt.selected = true;
+        servingsSelect.appendChild(opt);
+      });
+      servingsSelect.addEventListener("change", function () {
+        recipeModalIngredients[idx].servings = parseFloat(servingsSelect.value);
+        renderRecipeIngredients();
+        updateRecipeNickelSummary();
+      });
+      var nickelSpan = document.createElement("span");
+      nickelSpan.className = "recipe-ing-nickel";
+      nickelSpan.textContent = ingNi + " \u00b5g";
+      var removeBtn = document.createElement("button");
+      removeBtn.className = "btn-remove-entry";
+      removeBtn.textContent = "Remove";
+      removeBtn.addEventListener("click", function () {
+        recipeModalIngredients.splice(idx, 1);
+        renderRecipeIngredients();
+        updateRecipeNickelSummary();
+      });
+      li.appendChild(nameSpan);
+      li.appendChild(servingsSelect);
+      li.appendChild(nickelSpan);
+      li.appendChild(removeBtn);
+      list.appendChild(li);
+    });
+  }
+
+  function updateRecipeNickelSummary() {
+    var el = document.getElementById("recipe-nickel-summary");
+    if (!el) return;
+    var total = 0;
+    recipeModalIngredients.forEach(function (ing) {
+      total += (ing.nickelUgPerServing || 0) * (ing.servings || 1);
+    });
+    total = Math.round(total * 10) / 10;
+    var servings = parseInt((document.getElementById("recipe-servings") || {}).value) || 1;
+    var perServing = Math.round((total / servings) * 10) / 10;
+    el.textContent = "Total: " + total + " \u00b5g \u00b7 Per serving: " + perServing + " \u00b5g (" + servings + " servings)";
+  }
+
+  function openRecipeIngredientModal() {
+    var modal = document.getElementById("recipe-ingredient-modal");
+    var searchInput = document.getElementById("recipe-ingredient-search");
+    if (!modal) return;
+    if (searchInput) searchInput.value = "";
+    runRecipeIngredientSearch();
+    modal.hidden = false;
+    if (searchInput) searchInput.focus();
+  }
+
+  function runRecipeIngredientSearch() {
+    var searchInput = document.getElementById("recipe-ingredient-search");
+    var results = document.getElementById("recipe-ingredient-results");
+    var query = searchInput ? searchInput.value : "";
+    var foods = searchFoods(query);
+    renderSearchResults(foods, results, {
+      showAddButton: true,
+      onAddClick: function (food) {
+        recipeModalIngredients.push(buildEntryFromFood(food));
+        renderRecipeIngredients();
+        updateRecipeNickelSummary();
+        var modal = document.getElementById("recipe-ingredient-modal");
+        if (modal) modal.hidden = true;
+      }
+    });
+  }
+
+  // Wire up recipe UI
+  (function () {
+    var recipeIngSearch = document.getElementById("recipe-ingredient-search");
+    if (recipeIngSearch) recipeIngSearch.addEventListener("input", runRecipeIngredientSearch);
+    var recipeIngCancel = document.getElementById("recipe-ingredient-cancel");
+    if (recipeIngCancel) recipeIngCancel.addEventListener("click", function () {
+      var modal = document.getElementById("recipe-ingredient-modal");
+      if (modal) modal.hidden = true;
+    });
+    var recipeSave = document.getElementById("recipe-save");
+    if (recipeSave) recipeSave.addEventListener("click", function () {
+      var name = (document.getElementById("recipe-name").value || "").trim();
+      if (!name) { alert("Please enter a recipe name."); return; }
+      if (recipeModalIngredients.length === 0) { alert("Add at least one ingredient."); return; }
+      var totalServings = parseInt(document.getElementById("recipe-servings").value) || 1;
+      var recipes = getStoredRecipes();
+      if (editingRecipeId) {
+        for (var j = 0; j < recipes.length; j++) {
+          if (recipes[j].id === editingRecipeId) {
+            recipes[j].name = name;
+            recipes[j].ingredients = recipeModalIngredients;
+            recipes[j].totalServings = totalServings;
+            break;
+          }
+        }
+      } else {
+        recipes.push({ id: "recipe-" + Date.now(), name: name, ingredients: recipeModalIngredients, totalServings: totalServings, createdAt: new Date().toISOString() });
+      }
+      setStoredRecipes(recipes);
+      var modal = document.getElementById("recipe-modal");
+      if (modal) modal.hidden = true;
+      renderRecipes();
+    });
+    var recipeCancel = document.getElementById("recipe-cancel");
+    if (recipeCancel) recipeCancel.addEventListener("click", function () {
+      var modal = document.getElementById("recipe-modal");
+      if (modal) modal.hidden = true;
+    });
+    var recipeModal = document.getElementById("recipe-modal");
+    if (recipeModal) recipeModal.addEventListener("click", function (e) {
+      if (e.target === recipeModal) recipeModal.hidden = true;
+    });
+    var recipeIngModal = document.getElementById("recipe-ingredient-modal");
+    if (recipeIngModal) recipeIngModal.addEventListener("click", function (e) {
+      if (e.target === recipeIngModal) recipeIngModal.hidden = true;
+    });
+    var addIngBtn = document.getElementById("recipe-add-ingredient");
+    if (addIngBtn) addIngBtn.addEventListener("click", function () {
+      loadFoodDatabase().then(function () { openRecipeIngredientModal(); });
+    });
+    var addRecipeBtn = document.getElementById("add-recipe-btn");
+    if (addRecipeBtn) addRecipeBtn.addEventListener("click", function () {
+      loadFoodDatabase().then(function () { openRecipeModal(null); });
+    });
+    var servingsInput = document.getElementById("recipe-servings");
+    if (servingsInput) servingsInput.addEventListener("input", updateRecipeNickelSummary);
+  })();
+
+  // --- Meal Planner ---
+  var MEAL_PLAN_KEY = "nickeltrack-meal-plan";
+  var currentPlanWeek = null;
+
+  function getStoredPlan() {
+    try { var raw = localStorage.getItem(MEAL_PLAN_KEY); return raw ? JSON.parse(raw) : {}; }
+    catch (_) { return {}; }
+  }
+  function setStoredPlan(plan) {
+    try { localStorage.setItem(MEAL_PLAN_KEY, JSON.stringify(plan)); } catch (_) {}
+  }
+  function getPlanForWeek(weekKey) {
+    return getStoredPlan()[weekKey] || {};
+  }
+  function savePlanForWeek(weekKey, weekData) {
+    var plan = getStoredPlan();
+    plan[weekKey] = weekData;
+    setStoredPlan(plan);
+  }
+
+  function getCurrentWeekStr() {
+    var now = new Date();
+    var dayOfWeek = now.getDay() || 7;
+    var thursday = new Date(now);
+    thursday.setDate(now.getDate() + 4 - dayOfWeek);
+    var yearStart = new Date(thursday.getFullYear(), 0, 1);
+    var weekNo = Math.ceil(((thursday - yearStart) / 86400000 + 1) / 7);
+    return thursday.getFullYear() + "-W" + (weekNo < 10 ? "0" : "") + weekNo;
+  }
+
+  function getWeekDates(weekStr) {
+    var match = weekStr.match(/^(\d{4})-W(\d{2})$/);
+    if (!match) return [];
+    var year = parseInt(match[1]);
+    var week = parseInt(match[2]);
+    var jan4 = new Date(year, 0, 4);
+    var dayOfWeek = jan4.getDay() || 7;
+    var monday = new Date(jan4);
+    monday.setDate(jan4.getDate() - dayOfWeek + 1 + (week - 1) * 7);
+    var dates = [];
+    for (var i = 0; i < 7; i++) {
+      var d = new Date(monday);
+      d.setDate(monday.getDate() + i);
+      dates.push(formatLocalDate(d));
+    }
+    return dates;
+  }
+
+  var PLAN_DAY_NAMES = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  var PLAN_MEAL_SLOTS = ["breakfast", "lunch", "dinner", "snacks"];
+  var plannerAddTarget = null; // { dateStr, meal }
+
+  function renderPlannerGrid() {
+    var grid = document.getElementById("planner-grid");
+    if (!grid || !currentPlanWeek) return;
+    grid.innerHTML = "";
+    var weekDates = getWeekDates(currentPlanWeek);
+    var weekData = getPlanForWeek(currentPlanWeek);
+
+    weekDates.forEach(function (dateStr, dayIdx) {
+      var dayCard = document.createElement("div");
+      dayCard.className = "planner-day card";
+      var dayHeader = document.createElement("div");
+      dayHeader.className = "planner-day-header";
+      var dayTitle = document.createElement("h4");
+      dayTitle.textContent = PLAN_DAY_NAMES[dayIdx];
+      var dayDate = document.createElement("span");
+      dayDate.className = "planner-day-date";
+      dayDate.textContent = dateStr;
+      dayHeader.appendChild(dayTitle);
+      dayHeader.appendChild(dayDate);
+      dayCard.appendChild(dayHeader);
+
+      var dayData = weekData[dateStr] || { breakfast: [], lunch: [], dinner: [], snacks: [] };
+      var dayTotal = 0;
+
+      PLAN_MEAL_SLOTS.forEach(function (meal) {
+        var section = document.createElement("div");
+        section.className = "planner-meal-section";
+        var label = document.createElement("span");
+        label.className = "planner-meal-label";
+        label.textContent = mealLabels[meal] || meal;
+        section.appendChild(label);
+
+        var items = dayData[meal] || [];
+        items.forEach(function (entry, idx) {
+          var itemNi = (entry.nickelUgPerServing || 0) * (entry.servings || 1);
+          dayTotal += itemNi;
+          var itemEl = document.createElement("div");
+          itemEl.className = "planner-item";
+          var itemName = document.createElement("span");
+          itemName.textContent = entry.name_en || entry.name || "?";
+          var itemMeta = document.createElement("span");
+          itemMeta.className = "planner-item-meta";
+          itemMeta.textContent = Math.round(itemNi * 10) / 10 + " \u00b5g";
+          var removeBtn = document.createElement("button");
+          removeBtn.className = "btn-remove-entry";
+          removeBtn.textContent = "\u00d7";
+          removeBtn.addEventListener("click", function () {
+            items.splice(idx, 1);
+            dayData[meal] = items;
+            weekData[dateStr] = dayData;
+            savePlanForWeek(currentPlanWeek, weekData);
+            renderPlannerGrid();
+          });
+          itemEl.appendChild(itemName);
+          itemEl.appendChild(itemMeta);
+          itemEl.appendChild(removeBtn);
+          section.appendChild(itemEl);
+        });
+
+        var addBtn = document.createElement("button");
+        addBtn.className = "btn btn-secondary planner-add-btn";
+        addBtn.textContent = "+";
+        addBtn.addEventListener("click", function () {
+          openPlannerAddModal(dateStr, meal);
+        });
+        section.appendChild(addBtn);
+        dayCard.appendChild(section);
+      });
+
+      var totalEl = document.createElement("div");
+      totalEl.className = "planner-day-total";
+      totalEl.textContent = "Daily total: " + Math.round(dayTotal * 10) / 10 + " \u00b5g";
+      var goal = getStoredGoal();
+      if (dayTotal > goal * 1.25) totalEl.classList.add("over-goal");
+      else if (dayTotal > goal) totalEl.classList.add("near-goal");
+      dayCard.appendChild(totalEl);
+      grid.appendChild(dayCard);
+    });
+  }
+
+  function openPlannerAddModal(dateStr, meal) {
+    plannerAddTarget = { dateStr: dateStr, meal: meal };
+    var modal = document.getElementById("planner-add-modal");
+    var context = document.getElementById("planner-add-context");
+    if (context) context.textContent = (mealLabels[meal] || meal) + " on " + dateStr;
+    // Show foods tab by default
+    showPlannerTab("foods");
+    var searchInput = document.getElementById("planner-food-search");
+    if (searchInput) { searchInput.value = ""; }
+    runPlannerFoodSearch();
+    renderPlannerRecipeList();
+    if (modal) modal.hidden = false;
+    if (searchInput) searchInput.focus();
+  }
+
+  function showPlannerTab(tab) {
+    var foodsTab = document.getElementById("planner-foods-tab");
+    var recipesTab = document.getElementById("planner-recipes-tab");
+    if (foodsTab) foodsTab.hidden = tab !== "foods";
+    if (recipesTab) recipesTab.hidden = tab !== "recipes";
+    document.querySelectorAll(".planner-tab").forEach(function (btn) {
+      btn.classList.toggle("is-active", btn.getAttribute("data-tab") === tab);
+    });
+  }
+
+  function addToPlan(entry) {
+    if (!plannerAddTarget || !currentPlanWeek) return;
+    var weekData = getPlanForWeek(currentPlanWeek);
+    var dayData = weekData[plannerAddTarget.dateStr] || { breakfast: [], lunch: [], dinner: [], snacks: [] };
+    var arr = dayData[plannerAddTarget.meal] || [];
+    arr.push(entry);
+    dayData[plannerAddTarget.meal] = arr;
+    weekData[plannerAddTarget.dateStr] = dayData;
+    savePlanForWeek(currentPlanWeek, weekData);
+    var modal = document.getElementById("planner-add-modal");
+    if (modal) modal.hidden = true;
+    renderPlannerGrid();
+  }
+
+  function runPlannerFoodSearch() {
+    var searchInput = document.getElementById("planner-food-search");
+    var results = document.getElementById("planner-food-results");
+    var query = searchInput ? searchInput.value : "";
+    var foods = searchFoods(query);
+    renderSearchResults(foods, results, {
+      showAddButton: true,
+      onAddClick: function (food) { addToPlan(buildEntryFromFood(food)); }
+    });
+  }
+
+  function renderPlannerRecipeList() {
+    var container = document.getElementById("planner-recipe-list");
+    if (!container) return;
+    container.innerHTML = "";
+    var recipes = getStoredRecipes();
+    if (recipes.length === 0) {
+      container.appendChild(document.createTextNode("No recipes saved yet."));
+      return;
+    }
+    recipes.forEach(function (recipe) {
+      var div = document.createElement("div");
+      div.className = "food-result card";
+      div.setAttribute("role", "listitem");
+      var nickelPerServing = getRecipeNickelPerServing(recipe);
+      div.innerHTML =
+        "<div class=\"food-result-name\">" + escapeHtml(recipe.name || "Untitled") + "</div>" +
+        "<div class=\"food-result-meta\">" + nickelPerServing + " \u00b5g/serving (" + recipe.totalServings + " servings)</div>" +
+        "<button type=\"button\" class=\"btn btn-primary btn-add-food\">Add</button>";
+      div.querySelector(".btn-add-food").addEventListener("click", function () {
+        addToPlan({ name_en: recipe.name, nickelUgPerServing: nickelPerServing, servings: 1, type: "recipe", recipeId: recipe.id });
+      });
+      container.appendChild(div);
+    });
+  }
+
+  // Wire up planner UI
+  (function () {
+    var plannerWeekInput = document.getElementById("planner-week");
+    var plannerPrev = document.getElementById("planner-prev-week");
+    var plannerNext = document.getElementById("planner-next-week");
+    if (plannerWeekInput) {
+      plannerWeekInput.addEventListener("change", function () {
+        if (plannerWeekInput.value) {
+          currentPlanWeek = plannerWeekInput.value;
+          renderPlannerGrid();
+        }
+      });
+    }
+    if (plannerPrev) plannerPrev.addEventListener("click", function () {
+      if (!currentPlanWeek) return;
+      var m = currentPlanWeek.match(/^(\d{4})-W(\d{2})$/);
+      if (!m) return;
+      var y = parseInt(m[1]); var w = parseInt(m[2]) - 1;
+      if (w < 1) { y--; w = 52; }
+      currentPlanWeek = y + "-W" + (w < 10 ? "0" : "") + w;
+      if (plannerWeekInput) plannerWeekInput.value = currentPlanWeek;
+      renderPlannerGrid();
+    });
+    if (plannerNext) plannerNext.addEventListener("click", function () {
+      if (!currentPlanWeek) return;
+      var m = currentPlanWeek.match(/^(\d{4})-W(\d{2})$/);
+      if (!m) return;
+      var y = parseInt(m[1]); var w = parseInt(m[2]) + 1;
+      if (w > 52) { y++; w = 1; }
+      currentPlanWeek = y + "-W" + (w < 10 ? "0" : "") + w;
+      if (plannerWeekInput) plannerWeekInput.value = currentPlanWeek;
+      renderPlannerGrid();
+    });
+    var plannerFoodSearch = document.getElementById("planner-food-search");
+    if (plannerFoodSearch) plannerFoodSearch.addEventListener("input", runPlannerFoodSearch);
+    var plannerAddCancel = document.getElementById("planner-add-cancel");
+    if (plannerAddCancel) plannerAddCancel.addEventListener("click", function () {
+      var modal = document.getElementById("planner-add-modal");
+      if (modal) modal.hidden = true;
+    });
+    var plannerAddModal = document.getElementById("planner-add-modal");
+    if (plannerAddModal) plannerAddModal.addEventListener("click", function (e) {
+      if (e.target === plannerAddModal) plannerAddModal.hidden = true;
+    });
+    document.querySelectorAll(".planner-tab").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        showPlannerTab(btn.getAttribute("data-tab"));
+      });
+    });
+  })();
+
+  // --- External resources: add resource ---
+  var addResourceBtn = document.getElementById("add-resource-btn");
   if (addResourceBtn) {
     addResourceBtn.addEventListener("click", function () {
-      const url = prompt("Resource URL:");
+      var url = prompt("Resource URL:");
       if (!url || !url.trim()) return;
-      const desc = prompt("Short description:");
-      const list = document.getElementById("resources-list");
+      var trimmedUrl = url.trim();
+      if (/^javascript:/i.test(trimmedUrl)) { alert("Invalid URL"); return; }
+      if (!/^https?:\/\//i.test(trimmedUrl)) trimmedUrl = "https://" + trimmedUrl;
+      var desc = prompt("Short description:");
+      var list = document.getElementById("resources-list");
       if (!list) return;
-      const li = document.createElement("li");
+      var li = document.createElement("li");
       li.className = "resource-card card";
-      li.innerHTML =
-        '<a href="' +
-        url.trim() +
-        '" class="resource-link" target="_blank" rel="noopener">' +
-        (url.length > 50 ? url.slice(0, 47) + "…" : url) +
-        "</a>" +
-        (desc && desc.trim()
-          ? '<p class="resource-desc">' + desc.trim() + "</p>"
-          : "");
+      var a = document.createElement("a");
+      a.href = trimmedUrl;
+      a.className = "resource-link";
+      a.target = "_blank";
+      a.rel = "noopener";
+      a.textContent = trimmedUrl.length > 50 ? trimmedUrl.slice(0, 47) + "..." : trimmedUrl;
+      li.appendChild(a);
+      if (desc && desc.trim()) {
+        var p = document.createElement("p");
+        p.className = "resource-desc";
+        p.textContent = desc.trim();
+        li.appendChild(p);
+      }
       list.appendChild(li);
     });
   }

@@ -35,8 +35,17 @@
     <!-- Meal Tracking -->
     <section id="meal-tracking" class="page-section is-visible" aria-labelledby="meal-tracking-heading">
       <h2 id="meal-tracking-heading" class="section-heading">Meal Tracking</h2>
+      <div class="calendar-date-nav card">
+        <div class="calendar-wrap" id="calendar-wrap" aria-label="Calendar"></div>
+        <div class="date-nav">
+          <button type="button" class="btn btn-secondary date-prev" id="date-prev" aria-label="Previous day">←</button>
+          <label for="meal-date-input" class="visually-hidden">Date</label>
+          <input type="date" id="meal-date-input" class="input date-input" />
+          <button type="button" class="btn btn-secondary date-next" id="date-next" aria-label="Next day">→</button>
+        </div>
+      </div>
       <div class="daily-summary card">
-        <h3>Today’s nickel</h3>
+        <h3 id="daily-summary-heading">Today’s nickel</h3>
         <div class="nickel-display">
           <span class="nickel-value" id="today-total">0</span>
           <span class="nickel-unit">µg</span>
@@ -45,6 +54,7 @@
           <span class="nickel-unit">goal</span>
         </div>
         <p class="hint">Set your daily goal in settings. Track by meal and snack below.</p>
+        <p class="hint save-hint">Entries are saved automatically for each date.</p>
       </div>
       <div class="meals-list">
         <article class="meal-card card" data-meal="breakfast">
@@ -146,31 +156,82 @@
     <!-- Recipes -->
     <section id="recipes" class="page-section" aria-labelledby="recipes-heading" hidden>
       <h2 id="recipes-heading" class="section-heading">Recipes</h2>
-      <p class="section-intro">Save recipes with ingredients and nickel per serving (µg and low/medium/high).</p>
-      <div class="recipes-grid" id="recipes-grid">
-        <div class="empty-state card">
-          <p>No recipes yet. Add your first recipe to see it here.</p>
-          <button type="button" class="btn btn-primary" id="add-recipe-btn">Add recipe</button>
+      <p class="section-intro">Save recipes with ingredients and nickel per serving.</p>
+      <div class="recipes-actions">
+        <button type="button" class="btn btn-primary" id="add-recipe-btn">+ Add recipe</button>
+      </div>
+      <div class="recipes-grid" id="recipes-grid"></div>
+    </section>
+
+    <!-- Add Recipe modal -->
+    <div class="modal-overlay" id="recipe-modal" hidden aria-modal="true" aria-labelledby="recipe-modal-title">
+      <div class="modal card">
+        <h3 id="recipe-modal-title" class="modal-title">Add Recipe</h3>
+        <div class="recipe-form">
+          <label for="recipe-name">Recipe name</label>
+          <input type="text" id="recipe-name" class="input input-search" placeholder="e.g. Egg Salad Sandwich" />
+          <label for="recipe-servings">Number of servings</label>
+          <input type="number" id="recipe-servings" class="input" value="1" min="1" step="1" style="max-width:6rem" />
+          <h4>Ingredients</h4>
+          <ul class="recipe-ingredients-list" id="recipe-ingredients-list"></ul>
+          <button type="button" class="btn btn-secondary" id="recipe-add-ingredient">+ Add ingredient</button>
+          <div class="recipe-nickel-summary" id="recipe-nickel-summary"></div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-primary" id="recipe-save">Save Recipe</button>
+          <button type="button" class="btn btn-secondary" id="recipe-cancel">Cancel</button>
         </div>
       </div>
-    </section>
+    </div>
+
+    <!-- Add Ingredient to Recipe modal -->
+    <div class="modal-overlay" id="recipe-ingredient-modal" hidden aria-modal="true" aria-labelledby="recipe-ingredient-title">
+      <div class="modal card">
+        <h3 id="recipe-ingredient-title" class="modal-title">Add Ingredient</h3>
+        <label for="recipe-ingredient-search" class="visually-hidden">Search foods</label>
+        <input type="search" id="recipe-ingredient-search" class="input input-search" placeholder="Search foods..." autocomplete="off" />
+        <div class="modal-results" id="recipe-ingredient-results" role="list"></div>
+        <button type="button" class="btn btn-secondary" id="recipe-ingredient-cancel">Cancel</button>
+      </div>
+    </div>
 
     <!-- Meal Planner -->
     <section id="meal-planner" class="page-section" aria-labelledby="meal-planner-heading" hidden>
       <h2 id="meal-planner-heading" class="section-heading">Meal Planner</h2>
-      <p class="section-intro">Use presets or pull from your recipes to plan ahead.</p>
+      <p class="section-intro">Plan meals for the week. Assign recipes or individual foods to each day.</p>
       <div class="planner-controls">
-        <label>
-          <span class="label-text">Week of</span>
-          <input type="week" class="input" id="planner-week" />
-        </label>
-      </div>
-      <div class="planner-grid" id="planner-grid">
-        <div class="empty-state card">
-          <p>Pick a week above, then assign meals from presets or your recipes.</p>
+        <div class="planner-week-nav">
+          <button type="button" class="btn btn-secondary" id="planner-prev-week" aria-label="Previous week">&larr;</button>
+          <label>
+            <span class="label-text">Week of</span>
+            <input type="week" class="input" id="planner-week" />
+          </label>
+          <button type="button" class="btn btn-secondary" id="planner-next-week" aria-label="Next week">&rarr;</button>
         </div>
       </div>
+      <div class="planner-grid" id="planner-grid"></div>
     </section>
+
+    <!-- Add to Plan modal -->
+    <div class="modal-overlay" id="planner-add-modal" hidden aria-modal="true" aria-labelledby="planner-add-title">
+      <div class="modal card">
+        <h3 id="planner-add-title" class="modal-title">Add to plan</h3>
+        <p id="planner-add-context" class="modal-meal-name"></p>
+        <div class="planner-add-tabs">
+          <button type="button" class="btn btn-secondary planner-tab is-active" data-tab="foods">Foods</button>
+          <button type="button" class="btn btn-secondary planner-tab" data-tab="recipes">Recipes</button>
+        </div>
+        <div id="planner-foods-tab">
+          <label for="planner-food-search" class="visually-hidden">Search foods</label>
+          <input type="search" id="planner-food-search" class="input input-search" placeholder="Search foods..." autocomplete="off" />
+          <div class="modal-results" id="planner-food-results" role="list"></div>
+        </div>
+        <div id="planner-recipes-tab" hidden>
+          <div id="planner-recipe-list" class="modal-results" role="list"></div>
+        </div>
+        <button type="button" class="btn btn-secondary" id="planner-add-cancel">Cancel</button>
+      </div>
+    </div>
 
     <!-- External Resources -->
     <section id="resources" class="page-section" aria-labelledby="resources-heading" hidden>

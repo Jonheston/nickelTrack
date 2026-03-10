@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "nickeltrack",
+      "runtimeExecutable": "/Users/jonheston/opt/anaconda3/bin/python3",
+      "runtimeArgs": ["/Users/jonheston/TFG Dropbox/Jon Heston/Mac/Documents/NickelTrack/server.py"],
+      "port": 5000
+    }
+  ]
+}
