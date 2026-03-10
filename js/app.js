@@ -1295,14 +1295,30 @@
   }
 
   function closeBarcodeScanner() {
-    if (html5QrCode) {
-      html5QrCode.stop().then(function () {
-        html5QrCode.clear();
-      }).catch(function () {});
-      html5QrCode = null;
-    }
+    // Always hide modal and reset state first, so Cancel always works
     if (barcodeModal) barcodeModal.hidden = true;
     barcodeMeal = null;
+    if (barcodeStatus) barcodeStatus.textContent = "Point your camera at a barcode...";
+    // Then attempt to stop scanner (may throw if not running)
+    if (html5QrCode) {
+      var scanner = html5QrCode;
+      html5QrCode = null;
+      try {
+        var state = scanner.getState && scanner.getState();
+        // Only stop if actually scanning (state 2) or paused (state 3)
+        if (state === 2 || state === 3) {
+          scanner.stop().then(function () {
+            try { scanner.clear(); } catch (_) {}
+          }).catch(function () {
+            try { scanner.clear(); } catch (_) {}
+          });
+        } else {
+          try { scanner.clear(); } catch (_) {}
+        }
+      } catch (_) {
+        try { scanner.clear(); } catch (_e) {}
+      }
+    }
   }
 
   if (barcodeCancel) barcodeCancel.addEventListener("click", closeBarcodeScanner);
@@ -1315,7 +1331,7 @@
   function onBarcodeScanSuccess(decodedText) {
     // Stop scanning immediately to prevent duplicate scans
     if (html5QrCode) {
-      html5QrCode.stop().catch(function () {});
+      try { html5QrCode.stop().catch(function () {}); } catch (_) {}
     }
     if (barcodeStatus) barcodeStatus.textContent = "Barcode: " + decodedText + ". Looking up product...";
 

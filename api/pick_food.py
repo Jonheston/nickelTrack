@@ -59,7 +59,11 @@ class handler(BaseHTTPRequestHandler):
             )
             text = (response.choices[0].message.content or "").strip()
         except Exception as e:
-            self._json_response({"error": "OpenAI request failed: " + str(e)}, 502)
+            err_str = str(e)
+            if "401" in err_str or "api_key" in err_str.lower() or "auth" in err_str.lower():
+                self._json_response({"error": "AI food matching is temporarily unavailable (API configuration issue)."}, 502)
+            else:
+                self._json_response({"error": "OpenAI request failed: " + err_str}, 502)
             return
 
         text = re.sub(r"^```\w*\n?", "", text)
