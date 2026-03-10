@@ -1248,10 +1248,6 @@
     });
   });
 
-  function startScannerWithCamera(cameraConfig, scanConfig) {
-    return html5QrCode.start(cameraConfig, scanConfig, onBarcodeScanSuccess, function () {});
-  }
-
   function openBarcodeScanner() {
     if (!barcodeModal || !barcodeReaderEl || typeof Html5Qrcode === "undefined") return;
     barcodeModal.hidden = false;
@@ -1260,34 +1256,42 @@
     html5QrCode = new Html5Qrcode("barcode-reader");
     var scanConfig = { fps: 10, qrbox: { width: 250, height: 150 } };
 
-    // Try rear camera first, then fall back to any camera
-    startScannerWithCamera({ facingMode: "environment" }, scanConfig)
-      .then(function () {
-        if (barcodeStatus) barcodeStatus.textContent = "Point your camera at a barcode...";
-      })
-      .catch(function (envErr) {
-        console.warn("Rear camera failed, trying any camera:", envErr);
-        if (barcodeStatus) barcodeStatus.textContent = "Trying alternative camera...";
-        // Fall back to any available camera
-        return startScannerWithCamera({ facingMode: "user" }, scanConfig)
-          .then(function () {
-            if (barcodeStatus) barcodeStatus.textContent = "Point your camera at a barcode...";
-          });
-      })
-      .catch(function (finalErr) {
-        console.error("All camera attempts failed:", finalErr);
-        var msg = "Camera not available.";
-        if (finalErr && finalErr.message) {
-          if (finalErr.message.indexOf("Permission") >= 0 || finalErr.message.indexOf("denied") >= 0) {
-            msg = "Camera permission denied. Please allow camera access in your browser settings and try again.";
-          } else if (finalErr.message.indexOf("secure") >= 0 || finalErr.message.indexOf("HTTPS") >= 0) {
-            msg = "Camera requires HTTPS. Please use the https:// version of this site.";
-          } else {
-            msg = "Camera error: " + finalErr.message;
-          }
+    // Enumerate actual cameras first — more reliable than facingMode on mobile
+    Html5Qrcode.getCameras().then(function (cameras) {
+      if (!cameras || cameras.length === 0) {
+        if (barcodeStatus) barcodeStatus.textContent = "No cameras found on this device.";
+        return;
+      }
+      // Prefer back/rear camera; fall back to first available
+      var camera = cameras[0];
+      for (var i = 0; i < cameras.length; i++) {
+        var label = (cameras[i].label || "").toLowerCase();
+        if (label.indexOf("back") >= 0 || label.indexOf("rear") >= 0 || label.indexOf("environment") >= 0) {
+          camera = cameras[i];
+          break;
         }
-        if (barcodeStatus) barcodeStatus.textContent = msg;
+      }
+      // If only one camera and no label, just use it (common on phones before permission grant)
+      if (barcodeStatus) barcodeStatus.textContent = "Starting camera...";
+      return html5QrCode.start(
+        camera.id,
+        scanConfig,
+        onBarcodeScanSuccess,
+        function () {} // ignore per-frame scan misses
+      ).then(function () {
+        if (barcodeStatus) barcodeStatus.textContent = "Point your camera at a barcode...";
       });
+    }).catch(function (err) {
+      console.error("Barcode scanner error:", err);
+      var msg = String(err.message || err || "");
+      if (msg.indexOf("NotAllowedError") >= 0 || msg.indexOf("Permission") >= 0 || msg.indexOf("denied") >= 0) {
+        if (barcodeStatus) barcodeStatus.textContent = "Camera permission denied. Please allow camera access in your browser settings and try again.";
+      } else if (msg.indexOf("secure") >= 0 || msg.indexOf("HTTPS") >= 0 || msg.indexOf("getUserMedia") >= 0) {
+        if (barcodeStatus) barcodeStatus.textContent = "Camera requires a secure (HTTPS) connection.";
+      } else {
+        if (barcodeStatus) barcodeStatus.textContent = "Camera error: " + msg;
+      }
+    });
   }
 
   function closeBarcodeScanner() {
